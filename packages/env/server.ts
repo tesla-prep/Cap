@@ -136,6 +136,11 @@ function createServerEnv() {
 					"Base URL for media server webhooks (use host.docker.internal for Docker setups)",
 				),
 
+			/// Transcript sync
+			TRANSCRIPT_SYNC_POSTGRES_URL: z.string().optional(),
+			TRANSCRIPT_SYNC_ORG_ID: z.string().optional(),
+			TRANSCRIPT_SYNC_CRON_SECRET: z.string().optional(),
+
 			/// Ignore
 			NODE_ENV: z.string(),
 			WORKFLOWS_RPC_URL: z.string().optional(),

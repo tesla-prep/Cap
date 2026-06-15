@@ -1,0 +1,239 @@
+---
+title: "Self-hosting on a VPS"
+summary: "Deploy Cap on a dedicated VPS with on-host object storage and transcript sync"
+tags: "Deployment, Self-hosting, VPS"
+image: "/docs/self-hosting.webp"
+---
+
+This runbook covers the production deployment at `https://cap.cirqlecirqle.com` on the VPS at `204.12.163.253`.
+
+## Connect to the Server
+
+```bash
+ssh -i ~/.ssh/id_ed25519 vlad@204.12.163.253
+```
+
+## DNS and TLS
+
+Create an `A` record:
+
+```text
+cap.cirqlecirqle.com -> 204.12.163.253
+```
+
+Terminate TLS with the reverse proxy you already operate on the VPS. The current deployment uses Caddy and routes `cap.cirqlecirqle.com` to Cap Web on `127.0.0.1:3020`, with `/cap/*` routed to MinIO on `127.0.0.1:9000`. Keep MySQL, Postgres, and MinIO console ports private to the host.
+
+Open only the public ports required by the proxy:
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
+```
+
+## Install Runtime Packages
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git openssl
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker "$USER"
+docker compose version
+```
+
+Log out and back in after adding the user to the `docker` group.
+
+## Storage Layout
+
+Use persistent host directories for operational backups and local service state:
+
+```bash
+sudo mkdir -p /opt/cap/{app,backups,env}
+sudo chown -R "$USER":"$USER" /opt/cap
+```
+
+Video objects use the MinIO service from `docker-compose.yml`, with persistent Docker volume storage. This keeps the first deployment self-contained on the VPS; move object storage to Cloudflare R2 or another S3-compatible provider later if VPS disk growth becomes the limiting factor.
+
+## Clone and Configure
+
+```bash
+cd /opt/cap
+git clone https://github.com/CapSoftware/Cap.git app
+cd app
+cp docker-compose.vps.env.example .env
+```
+
+Generate required secrets:
+
+```bash
+openssl rand -hex 32
+openssl rand -hex 32
+openssl rand -hex 32
+openssl rand -base64 32
+```
+
+Use those values for:
+
+- `DATABASE_ENCRYPTION_KEY`
+- `NEXTAUTH_SECRET`
+- `MEDIA_SERVER_WEBHOOK_SECRET`
+- `MYSQL_PASSWORD`
+
+Set these production values:
+
+```bash
+CAP_URL=https://cap.cirqlecirqle.com
+CAP_PORT=127.0.0.1:3020
+MINIO_PORT=127.0.0.1:9000
+MINIO_CONSOLE_PORT=127.0.0.1:9001
+S3_PUBLIC_URL=https://cap.cirqlecirqle.com
+MINIO_ROOT_USER=<generated-minio-user>
+MINIO_ROOT_PASSWORD=<generated-minio-password>
+```
+
+Set transcription and email values:
+
+```bash
+DEEPGRAM_API_KEY=<deepgram-api-key>
+RESEND_API_KEY=<optional-resend-api-key>
+RESEND_FROM_DOMAIN=<optional-mail-domain>
+```
+
+Set transcript sync values:
+
+```bash
+TRANSCRIPT_SYNC_POSTGRES_PASSWORD=<generated-postgres-password>
+TRANSCRIPT_SYNC_CRON_SECRET=<generated-secret>
+```
+
+Leave `TRANSCRIPT_SYNC_ORG_ID` empty until first-user onboarding creates the self-hosted organization.
+
+The VPS override starts a separate `transcript-postgres` container and wires Cap Web to:
+
+```text
+postgres://cap_transcripts_app:<password>@transcript-postgres:5432/cap_transcripts
+```
+
+The transcript sync endpoint creates its table automatically on first successful run.
+
+## Start Cap
+
+```bash
+docker compose --env-file .env up -d
+docker compose --env-file .env ps
+```
+
+Cap Web runs migrations automatically in Docker self-hosting mode. If email is not configured, read login links from:
+
+```bash
+docker compose --env-file .env logs cap-web
+```
+
+## Capture the Organization ID
+
+After the first user signs in and completes organization setup, capture the new organization ID from MySQL:
+
+```bash
+docker exec cap-mysql mysql -ucap -p"$MYSQL_PASSWORD" cap \
+  -e "SELECT id, name, createdAt FROM organizations ORDER BY createdAt DESC LIMIT 5;"
+```
+
+Add the selected ID to `.env`:
+
+```bash
+TRANSCRIPT_SYNC_ORG_ID=<new-organization-id>
+```
+
+Restart Cap Web so the sync process receives the new value:
+
+```bash
+docker compose --env-file .env up -d cap-web
+```
+
+## Verify the Deployment
+
+Check service health:
+
+```bash
+docker compose --env-file .env ps
+curl -I https://cap.cirqlecirqle.com
+docker exec cap-media-server bun -e "const response = await fetch('http://localhost:3456/health'); process.exit(response.ok ? 0 : 1)"
+```
+
+Check MySQL migrations:
+
+```bash
+docker exec cap-mysql mysql -ucap -p"$MYSQL_PASSWORD" cap \
+  -e "SELECT COUNT(*) AS tables_count FROM information_schema.tables WHERE table_schema='cap';"
+```
+
+Check object storage through MinIO:
+
+```bash
+docker exec cap-minio ls /data/cap
+curl -I https://cap.cirqlecirqle.com/cap/
+```
+
+Record a short Cap, open the share page, and confirm playback. Then confirm transcription by setting `DEEPGRAM_API_KEY`, opening the video status, and checking that the transcript tab becomes available.
+
+## Run Transcript Sync
+
+Use the cron endpoint after `TRANSCRIPT_SYNC_ORG_ID`, `TRANSCRIPT_SYNC_POSTGRES_PASSWORD`, and the generated cron secret are configured:
+
+```bash
+curl -X POST https://cap.cirqlecirqle.com/api/cron/transcript-sync \
+  -H "Authorization: Bearer $TRANSCRIPT_SYNC_CRON_SECRET"
+```
+
+The same endpoint can be used for controlled backfill. It scans all videos in `TRANSCRIPT_SYNC_ORG_ID`, queues transcription where safe, and stores completed transcript records in Postgres database `cap_transcripts`.
+
+Use a bounded backfill batch when importing existing recordings:
+
+```bash
+curl -X POST "https://cap.cirqlecirqle.com/api/cron/transcript-sync?mode=backfill&batchSize=100" \
+  -H "Authorization: Bearer $TRANSCRIPT_SYNC_CRON_SECRET"
+```
+
+Smoke-check the failure paths before relying on automation:
+
+- Temporarily unset `DEEPGRAM_API_KEY`, run the endpoint, and confirm null-status videos are reported as failed without affecting playback.
+- For a video marked `COMPLETE`, temporarily move its `transcription.vtt` object in MinIO, run the endpoint, and confirm the Postgres row records `status='ERROR'` and `last_error`.
+- Restore the object, run the endpoint again, and confirm the same row becomes `status='SYNCED'` without creating a duplicate for the video and variant.
+
+## Backups
+
+Back up Cap MySQL:
+
+```bash
+mkdir -p /opt/cap/backups
+docker exec cap-mysql mysqldump -ucap -p"$MYSQL_PASSWORD" cap \
+  > "/opt/cap/backups/cap-mysql-$(date +%F).sql"
+```
+
+Back up transcript Postgres:
+
+```bash
+docker exec cap-transcript-postgres pg_dump \
+  -U cap_transcripts_app \
+  -d cap_transcripts \
+  > "/opt/cap/backups/cap-transcripts-$(date +%F).sql"
+```
+
+MinIO data should be copied to secondary storage if your retention policy requires off-server backups.
+
+## Rollback
+
+Stop the stack:
+
+```bash
+docker compose --env-file .env down
+```
+
+Restore MySQL and Postgres from known-good dumps, then start the stack again:
+
+```bash
+docker compose --env-file .env up -d
+```
+
+To pause transcript sync without affecting recording or playback, unset `TRANSCRIPT_SYNC_ORG_ID` or remove the cron scheduler that calls `/api/cron/transcript-sync`.

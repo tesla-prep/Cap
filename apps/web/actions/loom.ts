@@ -85,6 +85,7 @@ const LOOM_CSV_LIMIT_ERROR = `CSV imports are limited to ${MAX_LOOM_CSV_ROWS} ro
 
 async function createLoomImportRateLimitCheck(userId: User.UserId) {
 	if (NODE_ENV !== "production") return async () => false;
+	if (buildEnv.NEXT_PUBLIC_IS_CAP !== "true") return async () => false;
 
 	const headersList = await headers();
 	const request = new Request("https://cap.so/api/loom-import-rate-limit", {

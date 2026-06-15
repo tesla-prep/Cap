@@ -1,0 +1,52 @@
+services:
+  cap-web:
+    image: cap-web-transcript-sync:local
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    depends_on:
+      transcript-postgres:
+        condition: service_healthy
+    environment:
+      DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      TRANSCRIPT_SYNC_POSTGRES_URL: postgres://cap_transcripts_app:${TRANSCRIPT_SYNC_POSTGRES_PASSWORD}@transcript-postgres:5432/cap_transcripts
+      TRANSCRIPT_SYNC_ORG_ID: ${TRANSCRIPT_SYNC_ORG_ID:-}
+      TRANSCRIPT_SYNC_CRON_SECRET: ${TRANSCRIPT_SYNC_CRON_SECRET:-}
+
+  media-server:
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bun",
+          "-e",
+          "const response = await fetch('http://localhost:3456/health'); process.exit(response.ok ? 0 : 1)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  transcript-postgres:
+    container_name: cap-transcript-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cap_transcripts
+      POSTGRES_USER: cap_transcripts_app
+      POSTGRES_PASSWORD: ${TRANSCRIPT_SYNC_POSTGRES_PASSWORD}
+    volumes:
+      - cap-transcript-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cap_transcripts_app -d cap_transcripts"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - cap-network
+
+volumes:
+  cap-transcript-postgres-data:

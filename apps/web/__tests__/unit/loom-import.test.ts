@@ -8,6 +8,9 @@ const revalidatePathMock = vi.fn();
 const storageGetWritableAccessForUserMock = vi.hoisted(() => vi.fn());
 const checkRateLimitMock = vi.hoisted(() => vi.fn());
 const headersMock = vi.hoisted(() => vi.fn());
+const buildEnvMock = vi.hoisted(() => ({
+	NEXT_PUBLIC_IS_CAP: undefined as string | undefined,
+}));
 
 const mockDb = {
 	select: vi.fn(() => mockDb),
@@ -84,7 +87,7 @@ vi.mock("@cap/database/schema", () => ({
 }));
 
 vi.mock("@cap/env", () => ({
-	buildEnv: { NEXT_PUBLIC_IS_CAP: false },
+	buildEnv: buildEnvMock,
 	NODE_ENV: "production",
 	serverEnv: vi.fn(() => ({
 		CAP_VIDEOS_DEFAULT_PUBLIC: true,
@@ -184,6 +187,7 @@ describe("importFromLoom", () => {
 		whereMock.mockResolvedValue([]);
 		startMock.mockResolvedValue(undefined);
 		checkRateLimitMock.mockResolvedValue({ rateLimited: false });
+		buildEnvMock.NEXT_PUBLIC_IS_CAP = undefined;
 		headersMock.mockResolvedValue(
 			new Headers({
 				host: "cap.test",
@@ -224,6 +228,7 @@ describe("importFromLoom", () => {
 	});
 
 	it("rate limits single Loom imports per user", async () => {
+		buildEnvMock.NEXT_PUBLIC_IS_CAP = "true";
 		checkRateLimitMock.mockResolvedValueOnce({ rateLimited: true });
 
 		const fetchMock = vi.mocked(fetch);
@@ -309,6 +314,7 @@ describe("importFromLoom", () => {
 			}),
 		);
 		expect(startMock).toHaveBeenCalledTimes(1);
+		expect(checkRateLimitMock).not.toHaveBeenCalled();
 		expect(revalidatePathMock).toHaveBeenCalledWith("/dashboard/caps");
 	});
 
@@ -380,6 +386,7 @@ describe("importFromLoom", () => {
 	});
 
 	it("rejects CSV imports when the current user is rate limited", async () => {
+		buildEnvMock.NEXT_PUBLIC_IS_CAP = "true";
 		whereMock
 			.mockReturnValueOnce(withLimit([{ ownerId: "user-123" }]))
 			.mockReturnValueOnce(
