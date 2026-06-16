@@ -491,7 +491,8 @@ export async function setOrganizationStorageProvider({
 export async function connectOrganizationGoogleDrive(
 	organizationId: Organisation.OrganisationId,
 ) {
-	const { user } = await requireOrganizationStorageManagerAccess(organizationId);
+	const { user } =
+		await requireOrganizationStorageManagerAccess(organizationId);
 	const state = createGoogleDriveState(user.id, organizationId);
 	return { url: getGoogleDriveAuthUrl({ state }) };
 }
@@ -614,7 +615,8 @@ export async function setOrganizationGoogleDriveLocation({
 	driveId?: string | null;
 	driveName?: string | null;
 }) {
-	const { user } = await requireOrganizationStorageManagerAccess(organizationId);
+	const { user } =
+		await requireOrganizationStorageManagerAccess(organizationId);
 	const drive = await getOrganizationDrive(organizationId);
 	if (!drive || drive.status !== "active") {
 		throw new Error("Google Drive is not connected");

@@ -64,10 +64,8 @@ export const SharingDialog: React.FC<SharingDialogProps> = ({
 	inheritedPasswordSources = [],
 	onPasswordUpdated,
 }) => {
-	const {
-		spacesData: contextSpacesData,
-		activeOrganization,
-	} = useDashboardContext() ?? {};
+	const { spacesData: contextSpacesData, activeOrganization } =
+		useDashboardContext() ?? {};
 	const spacesData = propSpacesData || contextSpacesData;
 	const allowedEmailDomain =
 		activeOrganization?.organization.allowedEmailDomain;

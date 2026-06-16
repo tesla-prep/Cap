@@ -297,8 +297,7 @@ export const homepageCopy: HomePageCopy = {
 	},
 	pricing: {
 		title: "Simple, Honest Pricing",
-		subtitle:
-			"Start free and choose the setup that fits your workflow.",
+		subtitle: "Start free and choose the setup that fits your workflow.",
 		lovedBy: "Trusted by 40,000+ users",
 		commercial: {
 			title: "Desktop License",

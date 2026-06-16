@@ -142,5 +142,4 @@ describe("saveVideoEdits", () => {
 
 		expect(insertMock).not.toHaveBeenCalled();
 	});
-
 });

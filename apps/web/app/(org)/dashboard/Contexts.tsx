@@ -208,7 +208,6 @@ export function DashboardContexts({
 					isOpen={inviteDialogOpen}
 					setIsOpen={setInviteDialogOpen}
 				/>
-
 			</DashboardContext.Provider>
 		</ThemeContext.Provider>
 	);

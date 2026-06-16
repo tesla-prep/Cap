@@ -693,7 +693,9 @@ export function ExportPage() {
 				else if (result === "PlanCheckFailed")
 					throw new Error("Failed to verify your subscription status");
 				else if (result === "UpgradeRequired")
-					throw new Error("This recording cannot be uploaded from this account");
+					throw new Error(
+						"This recording cannot be uploaded from this account",
+					);
 			} finally {
 				await releaseExportSession();
 			}

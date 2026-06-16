@@ -184,8 +184,7 @@ export const recordScreenWindowsContent = {
 			"Cap makes recording your Windows screen with system audio incredibly simple. No Stereo Mix required, no complex audio routing.",
 		buttonText: "Download Cap",
 		buttonLink: "/download",
-		subtitle:
-			"Download Cap for Windows – free forever • Open-source",
+		subtitle: "Download Cap for Windows – free forever • Open-source",
 	},
 
 	relatedLinks: [
