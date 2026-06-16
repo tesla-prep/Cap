@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { selectProSeatProvider } from "@/utils/organization";
 
 describe("organization Pro seat provider selection", () => {
-	it("uses an admin's larger active subscription when they manage Pro seats", () => {
+	it("uses an admin's larger active subscription when they manage team seats", () => {
 		const owner = {
 			id: "owner",
 			inviteQuota: 1,
@@ -25,7 +25,7 @@ describe("organization Pro seat provider selection", () => {
 		).toBe("admin");
 	});
 
-	it("falls back to the owner subscription when the actor cannot manage Pro seats", () => {
+	it("falls back to the owner subscription when the actor cannot manage team seats", () => {
 		const owner = {
 			id: "owner",
 			inviteQuota: 1,

@@ -178,7 +178,7 @@ const studioModeConfig: FeaturePageConfig = {
 						"Automatic transcriptions",
 						"Comment & feedback tools",
 						"Team collaboration",
-						"5-minute free recordings",
+						"Browser-based recordings",
 						"Browser-based viewing",
 					],
 					bestFor: "Quick updates, feedback, team communication",
@@ -259,7 +259,7 @@ const studioModeConfig: FeaturePageConfig = {
 				{
 					question: "How does pricing work for Studio Mode?",
 					answer:
-						"Studio Mode is completely free for personal usage. For commercial usage, you need the Desktop License, which is included with Cap Pro or can be purchased separately.",
+						"Studio Mode is available in the Cap desktop app. For commercial usage, use a commercial desktop license or your own self-hosted build.",
 				},
 			],
 		},
@@ -275,7 +275,7 @@ const studioModeConfig: FeaturePageConfig = {
 			description:
 				"Download Cap and experience the power of Studio Mode for yourself. Create stunning, professional-quality recordings that engage your audience.",
 			primaryButton: "Download Cap Free",
-			secondaryButton: "Upgrade to Cap Pro",
+			secondaryButton: "Get started",
 		},
 	},
 	customSections: {

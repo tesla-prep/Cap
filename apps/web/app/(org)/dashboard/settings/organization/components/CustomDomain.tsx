@@ -14,15 +14,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { removeOrganizationDomain } from "@/actions/organization/remove-domain";
 import { Tooltip } from "@/components/Tooltip";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import { ConfirmationDialog } from "../../../_components/ConfirmationDialog";
 import { useDashboardContext } from "../../../Contexts";
 import CustomDomainDialog from "./CustomDomainDialog/CustomDomainDialog";
 
 export function CustomDomain() {
 	const router = useRouter();
-	const { activeOrganization, user } = useDashboardContext();
-	const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+	const { activeOrganization } = useDashboardContext();
 	const [showCustomDomainDialog, setShowCustomDomainDialog] = useState(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [isVerified, setIsVerified] = useState(
@@ -49,11 +47,6 @@ export function CustomDomain() {
 	});
 
 	const handleRemoveDomain = () => {
-		if (!user.isPro) {
-			setShowUpgradeModal(true);
-			return;
-		}
-
 		if (activeOrganization?.organization.id) {
 			removeDomainMutation.mutate(activeOrganization.organization.id);
 		}
@@ -66,7 +59,6 @@ export function CustomDomain() {
 					isVerified={isVerified}
 					setIsVerified={setIsVerified}
 					open={showCustomDomainDialog}
-					setShowUpgradeModal={(arg) => setShowUpgradeModal(arg)}
 					onClose={() => setShowCustomDomainDialog(false)}
 				/>
 			)}
@@ -166,13 +158,6 @@ export function CustomDomain() {
 					</div>
 				</div>
 			</div>
-
-			{showUpgradeModal && (
-				<UpgradeModal
-					open={showUpgradeModal}
-					onOpenChange={setShowUpgradeModal}
-				/>
-			)}
 		</>
 	);
 }

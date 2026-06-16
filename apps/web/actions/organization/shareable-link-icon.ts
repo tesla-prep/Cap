@@ -3,7 +3,6 @@
 import { db } from "@cap/database";
 import { getCurrentUser } from "@cap/database/auth/session";
 import { organizations, users } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import { ImageUploads } from "@cap/web-backend";
 import { Organisation } from "@cap/web-domain";
 import { eq } from "drizzle-orm";
@@ -15,7 +14,7 @@ import { requireOrganizationSettingsManager } from "./authorization";
 const allowedImageTypes = new Set(["image/jpeg", "image/png"]);
 const maxIconSizeBytes = 1024 * 1024;
 
-async function getManageableProOrganization(
+async function getManageableOrganization(
 	organizationId: Organisation.OrganisationId,
 ) {
 	const user = await getCurrentUser();
@@ -25,10 +24,6 @@ async function getManageableProOrganization(
 	}
 
 	await requireOrganizationSettingsManager(user.id, organizationId);
-
-	if (!userIsPro(user)) {
-		throw new Error("Upgrade required to customize shareable link branding");
-	}
 
 	const [organization] = await db()
 		.select({
@@ -79,7 +74,7 @@ export async function uploadShareableLinkIcon(formData: FormData) {
 	}
 
 	validateIcon(file);
-	const organization = await getManageableProOrganization(organizationId);
+	const organization = await getManageableOrganization(organizationId);
 	const arrayBuffer = await file.arrayBuffer();
 
 	await Effect.gen(function* () {
@@ -109,7 +104,7 @@ export async function uploadShareableLinkIcon(formData: FormData) {
 export async function removeShareableLinkIcon(
 	organizationId: Organisation.OrganisationId,
 ) {
-	const organization = await getManageableProOrganization(organizationId);
+	const organization = await getManageableOrganization(organizationId);
 
 	await Effect.gen(function* () {
 		const imageUploads = yield* ImageUploads;
@@ -138,7 +133,7 @@ export async function updateShareableLinkIconPreference({
 	organizationId: Organisation.OrganisationId;
 	useOrganizationIcon: boolean;
 }) {
-	const organization = await getManageableProOrganization(organizationId);
+	const organization = await getManageableOrganization(organizationId);
 
 	if (useOrganizationIcon && !organization.iconUrl) {
 		throw new Error(
@@ -164,7 +159,7 @@ export async function updateShareableLinkIconPreference({
 export async function hideShareableLinkCapLogo(
 	organizationId: Organisation.OrganisationId,
 ) {
-	const organization = await getManageableProOrganization(organizationId);
+	const organization = await getManageableOrganization(organizationId);
 
 	await db()
 		.update(organizations)

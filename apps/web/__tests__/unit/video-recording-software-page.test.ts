@@ -118,7 +118,7 @@ describe("VideoRecordingSoftwarePage FAQ schema", () => {
 		},
 		{
 			question: "What video recording software has no watermark?",
-			answer: "Cap has no watermark on any recording, including the free plan.",
+			answer: "Cap has no watermark on any recording, including the open-source edition.",
 		},
 		{
 			question: "Can I self-host my video recordings with Cap?",

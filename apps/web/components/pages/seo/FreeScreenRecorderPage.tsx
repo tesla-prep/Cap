@@ -20,7 +20,7 @@ export const freeScreenRecorderContent = {
 		{
 			title: "High-Quality Video Capture",
 			description:
-				"Record smooth, clear video with high frame rates and top audio quality, even on the free plan.",
+				"Record smooth, clear video with high frame rates and top audio quality, even on the open-source edition.",
 		},
 		{
 			title: "User-Friendly Interface",
@@ -74,9 +74,9 @@ export const freeScreenRecorderContent = {
 				"Yes, Cap is completely free, with no hidden fees. You get access to professional-grade <a href='/screen-recorder'>screen recording</a> tools without a subscription.",
 		},
 		{
-			question: "How long can I record for on the free plan?",
+			question: "How long can I record for on the open-source edition?",
 			answer:
-				"Cap's free plan allows for unlimited recording time, so you can capture your screen without interruptions. Whether you're on <a href='/screen-recorder-mac'>Mac</a> or <a href='/screen-recorder-windows'>Windows</a>, there are no time limits.",
+				"Cap's open-source edition allows for unlimited recording time, so you can capture your screen without interruptions. Whether you're on <a href='/screen-recorder-mac'>Mac</a> or <a href='/screen-recorder-windows'>Windows</a>, there are no time limits.",
 		},
 		{
 			question: "Can I store my recordings in the cloud?",

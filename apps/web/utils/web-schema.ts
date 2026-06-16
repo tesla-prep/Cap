@@ -109,13 +109,13 @@ export const createSoftwareApplicationSchema = (
 				price: "0",
 				priceCurrency: "USD",
 				name: "Free Plan",
-				description: "Studio mode for personal use, 5-minute shareable links",
+				description: "Studio mode for personal use and shareable links",
 			},
 			{
 				"@type": "Offer",
 				price: "8.16",
 				priceCurrency: "USD",
-				name: "Pro Plan",
+				name: "Hosted Plan",
 				priceValidUntil: "2025-12-31",
 				description: "Full features for professional use",
 				eligibleQuantity: {
@@ -245,7 +245,7 @@ export const createComparisonTableSchema = () => ({
 				item: {
 					"@type": "PropertyValue",
 					name: "Cap",
-					value: "Available in free & paid plans",
+					value: "Available in free and hosted plans",
 				},
 			},
 		],

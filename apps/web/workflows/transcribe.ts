@@ -8,7 +8,6 @@ import {
 } from "@cap/database/schema";
 import type { VideoMetadata } from "@cap/database/types";
 import { serverEnv } from "@cap/env";
-import { userIsPro } from "@cap/utils";
 import { Storage } from "@cap/web-backend";
 import {
 	AI_GENERATION_LANGUAGE_AUTO,
@@ -46,7 +45,6 @@ interface TranscribeWorkflowPayload {
 interface VideoData {
 	video: typeof videos.$inferSelect;
 	transcriptionDisabled: boolean;
-	isOwnerPro: boolean;
 	aiGenerationLanguage: AiGenerationLanguage;
 }
 
@@ -128,12 +126,6 @@ async function validateVideo(videoId: string): Promise<VideoData> {
 		result.orgSettings?.disableTranscript ??
 		false;
 
-	const isOwnerPro = userIsPro(result.owner);
-
-	console.log(
-		`[transcribe] Owner check: stripeSubscriptionStatus=${result.owner.stripeSubscriptionStatus}, thirdPartyStripeSubscriptionId=${result.owner.thirdPartyStripeSubscriptionId}, isOwnerPro=${isOwnerPro}`,
-	);
-
 	await db()
 		.update(videos)
 		.set({ transcriptionStatus: "PROCESSING" })
@@ -142,7 +134,6 @@ async function validateVideo(videoId: string): Promise<VideoData> {
 	return {
 		video: result.video,
 		transcriptionDisabled,
-		isOwnerPro,
 		aiGenerationLanguage: parseAiGenerationLanguage(
 			result.orgSettings?.aiGenerationLanguage,
 		),

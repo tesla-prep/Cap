@@ -121,9 +121,7 @@ export default function () {
 								const isRecording = type !== "screenshot";
 
 								const { copy, save, upload, actionState } =
-									createRecordingMutations(media, (e) => {
-										if (e === "upgradeRequired") setShowUpgradeTooltip(true);
-									});
+									createRecordingMutations(media);
 
 								const [metadata] = createResource(async () => {
 									if (!isRecording) return null;
@@ -146,8 +144,6 @@ export default function () {
 								});
 
 								const [imageExists, setImageExists] = createSignal(true);
-								const [showUpgradeTooltip, setShowUpgradeTooltip] =
-									createSignal(false);
 
 								const isLoading = () =>
 									copy.isPending || save.isPending || upload.isPending;
@@ -284,9 +280,7 @@ export default function () {
 													}}
 													class={cx(
 														"absolute inset-0 transition-all duration-150 pointer-events-auto rounded-[7.4px] dark:text-gray-100",
-														showUpgradeTooltip()
-															? "opacity-100"
-															: "opacity-0 group-hover:opacity-100",
+														"opacity-0 group-hover:opacity-100",
 														"backdrop-blur-sm p-2",
 													)}
 												>
@@ -394,7 +388,7 @@ export default function () {
 															}}
 															class={cx(
 																"absolute bottom-0 left-0 right-0 font-medium text-gray-4 bg-[#00000080] backdrop-blur-lg px-3 py-2 flex justify-between items-center pointer-events-none transition-all max-w-full overflow-hidden",
-																isLoading() || showUpgradeTooltip()
+																isLoading()
 																	? "opacity-0"
 																	: "group-hover:opacity-0",
 															)}
@@ -553,10 +547,7 @@ function createFakeWindowBounds(
 	});
 }
 
-function createRecordingMutations(
-	media: MediaEntry,
-	onEvent: (e: "upgradeRequired") => void,
-) {
+function createRecordingMutations(media: MediaEntry) {
 	const type = media.type ?? "recording";
 	const isRecording = type !== "screenshot";
 
@@ -725,22 +716,6 @@ function createRecordingMutations(
 				throw new Error("You need to sign in to share recordings");
 			}
 
-			const metadata = await commands.getVideoMetadata(media.path);
-			const plan = await commands.checkUpgradedAndUpdate();
-			const canShare = {
-				allowed: plan || metadata.duration < 300,
-				reason: !plan && metadata.duration >= 300 ? "upgrade_required" : null,
-			};
-
-			if (!canShare.allowed) {
-				if (canShare.reason === "upgrade_required") {
-					await commands.showWindow("Upgrade");
-					throw new Error(
-						"Upgrade required to share recordings longer than 5 minutes",
-					);
-				}
-			}
-
 			const uploadChannel = new Channel<UploadProgress>((progress) => {
 				console.log("Upload progress:", progress);
 				setActionState(
@@ -805,7 +780,6 @@ function createRecordingMutations(
 				case "PlanCheckFailed":
 					throw new Error("Plan check failed");
 				case "UpgradeRequired":
-					onEvent("upgradeRequired");
 					return;
 				default:
 					break;

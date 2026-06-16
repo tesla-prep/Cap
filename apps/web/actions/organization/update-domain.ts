@@ -3,7 +3,6 @@
 import { db } from "@cap/database";
 import { getCurrentUser } from "@cap/database/auth/session";
 import { organizations } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import type { Organisation } from "@cap/web-domain";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -18,10 +17,6 @@ export async function updateDomain(
 
 	if (!user) {
 		throw new Error("Unauthorized");
-	}
-
-	if (!userIsPro(user)) {
-		throw new Error("User is not subscribed");
 	}
 
 	const [organization] = await db()

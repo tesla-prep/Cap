@@ -108,7 +108,7 @@ describe("BestScreenRecorderPage FAQ schema", () => {
 		{
 			question: "Which screen recorder has no watermark?",
 			answer:
-				"Cap has no watermark on any recording, including the free plan. Studio Mode produces completely clean recordings with no branding overlays.",
+				"Cap has no watermark on any recording, including the open-source edition. Studio Mode produces completely clean recordings with no branding overlays.",
 		},
 		{
 			question: "What is the best screen recorder for beginners?",

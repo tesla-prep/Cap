@@ -16,28 +16,19 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { importFromLoom } from "@/actions/loom";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
-import { UpgradeModal } from "@/components/UpgradeModal";
 
 export const ImportLoomButton = ({
 	size = "md",
 }: {
 	size?: "sm" | "lg" | "md";
 }) => {
-	const { user, activeOrganization } = useDashboardContext();
+	const { activeOrganization } = useDashboardContext();
 	const router = useRouter();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [loomUrl, setLoomUrl] = useState("");
 	const [isImporting, setIsImporting] = useState(false);
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 
 	const handleClick = () => {
-		if (!user) return;
-
-		if (!user.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
-
 		setDialogOpen(true);
 	};
 
@@ -138,11 +129,6 @@ export const ImportLoomButton = ({
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-
-			<UpgradeModal
-				open={upgradeModalOpen}
-				onOpenChange={setUpgradeModalOpen}
-			/>
 		</>
 	);
 };

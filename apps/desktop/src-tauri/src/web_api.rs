@@ -13,7 +13,7 @@ use crate::{
 pub enum AuthedApiError {
     #[error("User is not authenticated or credentials have expired!")]
     InvalidAuthentication,
-    #[error("User needs to upgrade their account to use this feature!")]
+    #[error("This feature is unavailable for this account")]
     UpgradeRequired,
     #[error("App state is still initializing")]
     AppStateUnavailable,

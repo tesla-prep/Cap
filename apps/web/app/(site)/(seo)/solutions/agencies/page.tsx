@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { AgenciesPage } from "@/components/pages/seo/AgenciesPage";
 
 // Create FAQ structured data for SEO
@@ -23,7 +22,7 @@ const createFaqStructuredData = () => {
 		{
 			question: "How long can we record on the free version?",
 			answer:
-				"The free version supports recordings up to 5 minutes. For longer client presentations and unlimited recording time, upgrade to Cap Pro at $8.16/month (billed annually).",
+				"Cap supports quick cloud recordings and local Studio Mode recordings. Self-hosted deployments can configure the workflow that fits their team.",
 		},
 		{
 			question: "Is Cap secure enough for confidential client work?",
@@ -33,12 +32,12 @@ const createFaqStructuredData = () => {
 		{
 			question: "Can we use our own branding with Cap?",
 			answer:
-				"Yes. Cap Pro includes custom domain support (cap.yourdomain.com) so share links reflect your agency's brand. You can also use your own S3 storage for complete data ownership.",
+				"Yes. Custom domain support lets share links reflect your agency's brand. You can also use your own S3 storage for complete data ownership.",
 		},
 		{
 			question: "How does Cap pricing work for agency teams?",
 			answer:
-				"Cap Pro is $8.16/month per user (billed annually) and includes unlimited cloud storage, custom domains, team workspaces, and all collaboration features. Volume discounts are available for teams over 10 users.",
+				"Cap can be used as the hosted product or as an open-source self-hosted deployment. Agencies can choose the setup that matches their ownership, storage, and collaboration needs.",
 		},
 	];
 
@@ -119,16 +118,10 @@ export const metadata: Metadata = {
 export default function Page() {
 	return (
 		<>
-			<Script
-				id="faq-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: createFaqStructuredData() }}
-			/>
-			<Script
-				id="software-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: createSoftwareStructuredData() }}
-			/>
+			<script type="application/ld+json">{createFaqStructuredData()}</script>
+			<script type="application/ld+json">
+				{createSoftwareStructuredData()}
+			</script>
 			<AgenciesPage />
 		</>
 	);

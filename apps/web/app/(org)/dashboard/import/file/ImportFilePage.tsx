@@ -16,7 +16,6 @@ import {
 	type UploadStatus,
 	useUploadingContext,
 } from "@/app/(org)/dashboard/caps/UploadingContext";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import { uploadWithTarget } from "@/utils/upload-target";
 
 export const ImportFilePage = () => {
@@ -25,17 +24,11 @@ export const ImportFilePage = () => {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const { uploadingStore, setUploadStatus } = useUploadingContext();
 	const isUploading = useStore(uploadingStore, (s) => !!s.uploadStatus);
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(!user?.isPro);
 	const [isDragOver, setIsDragOver] = useState(false);
 
 	const processFile = useCallback(
 		async (file: File) => {
 			if (!user || !activeOrganization) return;
-
-			if (!user.isPro) {
-				setUpgradeModalOpen(true);
-				return;
-			}
 
 			const ok = await uploadVideoForServerProcessing(
 				file,
@@ -76,11 +69,6 @@ export const ImportFilePage = () => {
 
 	const handleBrowseClick = () => {
 		if (!user) return;
-
-		if (!user.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
 
 		inputRef.current?.click();
 	};
@@ -181,11 +169,6 @@ export const ImportFilePage = () => {
 				accept="video/*,.mov,.MOV,.mp4,.MP4,.avi,.AVI,.mkv,.MKV,.webm,.WEBM,.m4v,.M4V"
 				onChange={handleFileChange}
 				className="hidden"
-			/>
-
-			<UpgradeModal
-				open={upgradeModalOpen}
-				onOpenChange={setUpgradeModalOpen}
 			/>
 		</div>
 	);
@@ -352,13 +335,7 @@ async function uploadVideoForServerProcessing(
 	} catch (err) {
 		console.error("Video upload failed", err);
 
-		if (err instanceof Error && err.message === "upgrade_required") {
-			toast.error(
-				"Video duration exceeds the limit for free accounts. Please upgrade to Pro.",
-			);
-		} else {
-			toast.error("Failed to upload video. Please try again.");
-		}
+		toast.error("Failed to upload video. Please try again.");
 	}
 
 	setUploadStatus(undefined);

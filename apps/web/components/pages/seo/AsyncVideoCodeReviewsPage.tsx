@@ -161,7 +161,7 @@ export const asyncVideoCodeReviewsContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom for Code Reviews",
 			description:
-				"Loom is a capable async video tool but limits recording length and quality on its free plan, and stores all video on Loom's servers with no self-hosting option. Cap records at 4K with no recording-length limits in Studio Mode and supports <a href='/self-hosted-screen-recording'>self-hosted S3 storage</a> for teams with data residency requirements. Cap is also MIT-licensed and fully open source.",
+				"Loom is a capable async video tool but limits recording length and quality on its open-source edition, and stores all video on Loom's servers with no self-hosting option. Cap records at 4K with no recording-length limits in Studio Mode and supports <a href='/self-hosted-screen-recording'>self-hosted S3 storage</a> for teams with data residency requirements. Cap is also MIT-licensed and fully open source.",
 		},
 		{
 			title: "Cap vs Written PR Comments",

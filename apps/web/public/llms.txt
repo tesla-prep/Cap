@@ -50,7 +50,7 @@ Provide visual answers to support tickets. Create help videos and documentation.
 - Open source and self-hostable
 - Local recording and editing options
 - Better pricing (lifetime licenses available)
-- No recording time limits on paid plans
+- No recording time limits on hosted plans
 - Own your data with custom S3 storage
 
 ### vs OBS Studio
@@ -78,7 +78,7 @@ Provide visual answers to support tickets. Create help videos and documentation.
 
 - **Personal Use**: Free forever (5-minute recording limit)
 - **Desktop License**: $29/year or $58 lifetime (unlimited recording)
-- **Cap Pro**: $12/month ($8.16/month when billed annually) - includes cloud storage and AI features
+- **Hosted**: $12/month ($8.16/month when billed annually) - includes cloud storage and AI features
 - **Teams**: Custom pricing for organizations
 
 ## Privacy & Security

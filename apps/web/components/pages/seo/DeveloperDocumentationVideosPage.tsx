@@ -162,7 +162,7 @@ export const developerDocumentationVideosContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom for Developer Documentation",
 			description:
-				"Loom is a capable async video tool but limits recording quality and length on its free plan, and has no self-hosting option for teams with data residency requirements. Cap records at 4K with no recording-length limits in Studio Mode and supports <a href='/self-hosted-screen-recording'>self-hosted S3 storage</a>. Cap is also fully open source under the MIT license — developers can audit the code, contribute features, and trust the tool they're using to document their own products.",
+				"Loom is a capable async video tool but limits recording quality and length on its open-source edition, and has no self-hosting option for teams with data residency requirements. Cap records at 4K with no recording-length limits in Studio Mode and supports <a href='/self-hosted-screen-recording'>self-hosted S3 storage</a>. Cap is also fully open source under the MIT license — developers can audit the code, contribute features, and trust the tool they're using to document their own products.",
 		},
 		{
 			title: "Cap vs Written Documentation",

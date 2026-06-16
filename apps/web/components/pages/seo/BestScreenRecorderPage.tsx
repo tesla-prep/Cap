@@ -65,7 +65,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and share your screen in seconds with a link ready the moment you stop. Perfect for bug reports, async updates, and quick demos. Free plan includes recordings up to 5 minutes with built-in thread commenting.",
+					"Record and share your screen in seconds with a link ready the moment you stop. Perfect for bug reports, async updates, and quick demos. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -97,7 +97,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 				"No watermark",
 				{ text: "Yes", status: "positive" },
 				{ text: "Yes", status: "positive" },
-				{ text: "Free plan adds watermark", status: "negative" },
+				{ text: "Watermark-free exports", status: "negative" },
 				{ text: "Yes (paid only)", status: "warning" },
 			],
 			[
@@ -158,7 +158,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom",
 			description:
-				"Cap starts at $9.99/month compared to Loom's $18/month, and Cap's Studio Mode is completely free with no watermarks. Cap is also open-source, supports custom S3 storage, and records at up to 4K — quality that Loom's free and paid plans don't match. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
+				"Cap starts at $9.99/month compared to Loom's $18/month, and Cap's Studio Mode is completely free with no watermarks. Cap is also open-source, supports custom S3 storage, and records at up to 4K — quality and flexibility Loom doesn't match. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
 		},
 		{
 			title: "Cap vs Camtasia",
@@ -219,7 +219,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 		{
 			question: "What is the best free screen recorder?",
 			answer:
-				"Cap is the best free screen recorder available. Studio Mode is 100% free for personal use with unlimited recording time, no watermarks, and no time limits. Instant Mode supports recordings up to 5 minutes on the free plan with instant shareable links. <a href='/free-screen-recorder'>Download Cap's free screen recorder</a> to get started.",
+				"Cap is the best free screen recorder available. Studio Mode is 100% free for personal use with unlimited recording time, no watermarks, and no time limits. Instant Mode supports quick shareable recordings with instant links. <a href='/free-screen-recorder'>Download Cap's free screen recorder</a> to get started.",
 		},
 		{
 			question: "What is the best screen recorder for Mac?",
@@ -234,7 +234,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 		{
 			question: "Which screen recorder has no watermark?",
 			answer:
-				"Cap has no watermark on any recording, including the free plan. Studio Mode in Cap produces completely clean recordings with no branding overlays or watermarks. This makes Cap the best free screen recorder without watermarks available on Mac and Windows.",
+				"Cap has no watermark on any recording, including the open-source edition. Studio Mode in Cap produces completely clean recordings with no branding overlays or watermarks. This makes Cap the best free screen recorder without watermarks available on Mac and Windows.",
 		},
 		{
 			question: "What is the best screen recorder for beginners?",
@@ -249,7 +249,7 @@ export const bestScreenRecorderContent: SeoPageContent = {
 		{
 			question: "What is the best screen recorder for teams?",
 			answer:
-				"Cap is the best screen recorder for teams because of its built-in sharing and collaboration features. Instant shareable links work anywhere — Slack, email, Notion, Jira. Viewers can leave timestamped comments directly on recordings, making async feedback fast and structured. Cap Pro adds unlimited recording time, custom branding, and team management.",
+				"Cap is the best screen recorder for teams because of its built-in sharing and collaboration features. Instant shareable links work anywhere — Slack, email, Notion, Jira. Viewers can leave timestamped comments directly on recordings, making async feedback fast and structured. Hosted workflows add custom branding and team management.",
 		},
 	],
 

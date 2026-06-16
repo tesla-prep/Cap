@@ -49,13 +49,13 @@ export const remoteTeamCollaborationContent: SeoPageContent = {
 	recordingModes: {
 		title: "Two Ways to Record with Cap",
 		description:
-			"Cap gives you flexible recording options to match your workflow needs, with both modes available in the free plan",
+			"Cap gives you flexible recording options to match your workflow needs, with both modes available in the open-source edition",
 		modes: [
 			{
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Share your screen right away with a simple link—no waiting, just record and share in seconds. Record up to 5-minute shareable links for free, perfect for quick demos and explanations. Includes built-in thread commenting for easy collaboration.",
+					"Share your screen right away with a simple link—no waiting, just record and share in seconds. Record shareable links from the browser, perfect for quick demos and explanations. Includes built-in thread commenting for easy collaboration.",
 			},
 			{
 				icon: (
@@ -125,7 +125,7 @@ export const remoteTeamCollaborationContent: SeoPageContent = {
 		{
 			question: "Can I track who has viewed my team's recordings?",
 			answer:
-				"Yes, Cap's paid plans include view tracking and analytics, allowing team leads to see who has watched each recording and for how long. This helps ensure important information is reaching all team members and identifies content that may need follow-up.",
+				"Yes, Cap includes view tracking and analytics, allowing team leads to see who has watched each recording and for how long. This helps ensure important information is reaching all team members and identifies content that may need follow-up.",
 		},
 	],
 

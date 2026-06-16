@@ -14,7 +14,6 @@ import {
 	videoUploads,
 } from "@cap/database/schema";
 import type { VideoMetadata } from "@cap/database/types";
-import { userIsPro } from "@cap/utils";
 import { ImageUploads } from "@cap/web-backend";
 import {
 	type Folder,
@@ -247,19 +246,10 @@ function publicPageIconKeys(
 	};
 }
 
-/**
- * Custom presentation (branding, CTA, hidden Cap logo) is a Pro entitlement
- * gated on the org OWNER's plan at render time, mirroring `/s/`
- * (`getSharePageBranding`): when the owner downgrades, already-public
- * collections stay reachable but fall back to the default presentation.
- */
 function resolveEffectivePublicPage(
-	ownerIsPro: boolean,
 	stored: PublicCollectionDomain.PublicPageSettings | null | undefined,
 ) {
-	return PublicCollectionDomain.resolvePublicPageSettings(
-		ownerIsPro ? stored : null,
-	);
+	return PublicCollectionDomain.resolvePublicPageSettings(stored);
 }
 
 const resolvePublicCollection = cache(
@@ -281,14 +271,10 @@ const resolvePublicCollection = cache(
 					organizationTombstoneAt: organizations.tombstoneAt,
 					allowedEmailDomain: organizations.allowedEmailDomain,
 					organizationIconUrl: organizations.iconUrl,
-					ownerStripeSubscriptionStatus: users.stripeSubscriptionStatus,
-					ownerThirdPartyStripeSubscriptionId:
-						users.thirdPartyStripeSubscriptionId,
 					passwordHash: spaces.password,
 				})
 				.from(folders)
 				.innerJoin(organizations, eq(folders.organizationId, organizations.id))
-				.innerJoin(users, eq(organizations.ownerId, users.id))
 				.leftJoin(spaces, eq(folders.spaceId, spaces.id))
 				.where(eq(folders.id, collectionId as Folder.FolderId))
 				.limit(1),
@@ -304,14 +290,10 @@ const resolvePublicCollection = cache(
 					organizationTombstoneAt: organizations.tombstoneAt,
 					allowedEmailDomain: organizations.allowedEmailDomain,
 					organizationIconUrl: organizations.iconUrl,
-					ownerStripeSubscriptionStatus: users.stripeSubscriptionStatus,
-					ownerThirdPartyStripeSubscriptionId:
-						users.thirdPartyStripeSubscriptionId,
 					passwordHash: spaces.password,
 				})
 				.from(spaces)
 				.innerJoin(organizations, eq(spaces.organizationId, organizations.id))
-				.innerJoin(users, eq(organizations.ownerId, users.id))
 				.where(eq(spaces.id, collectionId as Space.SpaceIdOrOrganisationId))
 				.limit(1),
 		]);
@@ -323,14 +305,7 @@ const resolvePublicCollection = cache(
 
 		if (!candidate) return null;
 
-		const publicPage = resolveEffectivePublicPage(
-			userIsPro({
-				stripeSubscriptionStatus: candidate.ownerStripeSubscriptionStatus,
-				thirdPartyStripeSubscriptionId:
-					candidate.ownerThirdPartyStripeSubscriptionId,
-			}),
-			candidate.settings?.publicPage,
-		);
+		const publicPage = resolveEffectivePublicPage(candidate.settings?.publicPage);
 		const icons = await resolveIconUrls(
 			publicPageIconKeys(publicPage, {
 				organizationIconUrl: candidate.organizationIconUrl,

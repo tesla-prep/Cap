@@ -21,7 +21,6 @@ import { Confetti } from "@/app/(org)/dashboard/_components/Confetti";
 import { useDashboardContext } from "../../../../Contexts";
 import DomainStep from "./DomainStep";
 import { Stepper } from "./Stepper";
-import SubscribeContent from "./SubscribeContent";
 import SuccesStep from "./SuccessStep";
 import {
 	type DomainConfig,
@@ -120,7 +119,6 @@ interface CustomDomainDialogProps {
 	onClose: () => void;
 	isVerified: boolean;
 	setIsVerified: (value: boolean) => void;
-	setShowUpgradeModal: (arg: boolean) => void;
 }
 
 const CustomDomainDialog = ({
@@ -128,9 +126,8 @@ const CustomDomainDialog = ({
 	onClose,
 	isVerified,
 	setIsVerified,
-	setShowUpgradeModal,
 }: CustomDomainDialogProps) => {
-	const { activeOrganization, user } = useDashboardContext();
+	const { activeOrganization } = useDashboardContext();
 	const [domain, setDomain] = useState(
 		activeOrganization?.organization.customDomain || "",
 	);
@@ -286,6 +283,20 @@ const CustomDomainDialog = ({
 		],
 	);
 
+	useEffect(() => {
+		if (stepState.currentIndex === 2) {
+			const timeoutId = setTimeout(() => {
+				handleClose();
+			}, 8000);
+
+			return () => clearTimeout(timeoutId);
+		}
+
+		if (isVerified) {
+			handleNext();
+		}
+	}, [isVerified, stepState.currentIndex, handleClose, handleNext]);
+
 	if (!currentStep) {
 		return null;
 	}
@@ -343,17 +354,6 @@ const CustomDomainDialog = ({
 		});
 	};
 
-	useEffect(() => {
-		//if current step is success, close dialog in 8 seconds
-		if (stepState.currentIndex === 2) {
-			setTimeout(() => {
-				handleClose();
-			}, 8000);
-		} else if (isVerified) {
-			handleNext();
-		}
-	}, [isVerified, stepState.currentIndex, handleClose, handleNext]);
-
 	return (
 		<>
 			{stepState.currentIndex === 2 && (
@@ -384,8 +384,6 @@ const CustomDomainDialog = ({
 					<Stepper steps={steps} onStepClick={handleStepClick} />
 
 					<div className="relative w-full h-full">
-						{!user.isPro && <SubscribeContent />}
-
 						<div className="p-5">
 							{/* Domain Step */}
 							{currentStep.id === "domain" && (
@@ -445,30 +443,18 @@ const CustomDomainDialog = ({
 								</Button>
 							)}
 
-							{currentStep.id === "domain" &&
-								(user.isPro ? (
-									<Button
-										onClick={handleDomainSubmit}
-										size="sm"
-										spinner={updateDomainMutation.isPending}
-										disabled={updateDomainMutation.isPending || !domain.trim()}
-										variant="dark"
-										className="min-w-[100px]"
-									>
-										Next
-									</Button>
-								) : (
-									<Button
-										variant="blue"
-										size="sm"
-										onClick={() => {
-											setShowUpgradeModal(true);
-											handleClose();
-										}}
-									>
-										Upgrade To Cap Pro
-									</Button>
-								))}
+							{currentStep.id === "domain" && (
+								<Button
+									onClick={handleDomainSubmit}
+									size="sm"
+									spinner={updateDomainMutation.isPending}
+									disabled={updateDomainMutation.isPending || !domain.trim()}
+									variant="dark"
+									className="min-w-[100px]"
+								>
+									Next
+								</Button>
+							)}
 						</DialogFooter>
 					)}
 				</DialogContent>

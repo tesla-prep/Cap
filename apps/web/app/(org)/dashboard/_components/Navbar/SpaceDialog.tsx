@@ -215,8 +215,7 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [isUploading, setIsUploading] = useState(false);
-	const { activeOrganization, user, setUpgradeModalOpen } =
-		useDashboardContext();
+	const { activeOrganization } = useDashboardContext();
 	const [settings, setSettings] = useState<OrganizationSettings>({
 		...defaultSettings,
 		...space?.settings,
@@ -253,10 +252,6 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 	};
 
 	const handlePasswordToggle = (checked: boolean) => {
-		if (checked && user && !user.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
 		setPasswordEnabled(checked);
 		if (!checked) {
 			setPasswordValue("");
@@ -472,8 +467,6 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 								kind="space"
 								enabled={publicEnabled}
 								onChange={setPublicEnabled}
-								isPro={Boolean(activeOrganization?.ownerIsPro)}
-								onUpgrade={() => setUpgradeModalOpen(true)}
 								collectionId={edit && space?.id ? space.id : undefined}
 							/>
 
@@ -532,10 +525,9 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 						<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
 							{settingOptions.map((option) => {
 								const disabled =
-									(option.pro && !user?.isPro) ||
-									((option.value === "disableSummary" ||
+									(option.value === "disableSummary" ||
 										option.value === "disableChapters") &&
-										settings.disableTranscript);
+									settings.disableTranscript;
 
 								return (
 									<div
@@ -545,11 +537,6 @@ export const NewSpaceForm: React.FC<NewSpaceFormProps> = (props) => {
 										<div>
 											<div className="flex gap-1.5 items-center">
 												<p className="text-sm text-gray-12">{option.label}</p>
-												{option.pro && (
-													<span className="rounded-full bg-blue-11 px-1.5 py-0.5 text-[10px] font-medium leading-none text-white">
-														Pro
-													</span>
-												)}
 											</div>
 											<p className="text-xs text-gray-10">
 												{option.description}

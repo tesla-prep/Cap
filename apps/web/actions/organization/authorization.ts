@@ -112,7 +112,7 @@ export async function requireOrganizationProSeatManager(
 		organizationId,
 	);
 	if (!canManageOrganizationProSeats(access.role)) {
-		throw new Error("Only admins and owners can manage Pro seats");
+		throw new Error("Only admins and owners can manage team seats");
 	}
 	return access;
 }

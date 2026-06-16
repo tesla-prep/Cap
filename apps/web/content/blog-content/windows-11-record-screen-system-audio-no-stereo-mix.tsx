@@ -73,7 +73,7 @@ export const recordScreenWindowsContent = {
               <li>Choose your capture area (Screen, Window, or Region)</li>
               <li>Click "Start Recording"</li>
             </ol>
-            <p><strong>Pro Tip:</strong> Cap captures both audio sources on separate tracks so you can adjust levels independently in the editor.</p>
+            <p><strong>Expert Tip:</strong> Cap captures both audio sources on separate tracks so you can adjust levels independently in the editor.</p>
           `,
 				},
 			],
@@ -125,7 +125,7 @@ export const recordScreenWindowsContent = {
 	},
 
 	proTips: {
-		title: "Pro Tips for Windows Screen Recording",
+		title: "Advanced Tips for Windows Screen Recording",
 		tips: [
 			{
 				title: "Separate Audio Tracks",
@@ -185,7 +185,7 @@ export const recordScreenWindowsContent = {
 		buttonText: "Download Cap",
 		buttonLink: "/download",
 		subtitle:
-			"Download Cap for Windows – free forever • Open-source • 14-day Pro trial",
+			"Download Cap for Windows – free forever • Open-source",
 	},
 
 	relatedLinks: [

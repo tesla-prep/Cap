@@ -10,7 +10,6 @@ import {
 	users,
 	videos,
 } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import { Database, ImageUploads } from "@cap/web-backend";
 import type { ImageUpload } from "@cap/web-domain";
 import { and, count, eq, inArray, isNull, or, sql } from "drizzle-orm";
@@ -44,8 +43,6 @@ export type Organization = {
 	invites: (typeof organizationInvites.$inferSelect)[];
 	inviteQuota: number;
 	totalInvites: number;
-	/** Whether the organization OWNER is on Pro — gates org-wide Pro features. */
-	ownerIsPro: boolean;
 };
 
 export type OrganizationSettings = NonNullable<
@@ -462,7 +459,6 @@ export async function getDashboardData(user: typeof userSelectProps) {
 						),
 						inviteQuota: proSeatProvider?.inviteQuota || 1,
 						totalInvites,
-						ownerIsPro: userIsPro(owner ?? null),
 					};
 				}),
 			),

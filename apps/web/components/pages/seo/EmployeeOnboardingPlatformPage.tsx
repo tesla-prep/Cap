@@ -36,7 +36,7 @@ export const employeeOnboardingContent: SeoPageContent = {
 		{
 			title: "Cost-Effective Solution",
 			description:
-				"Cap offers a powerful onboarding tool at a fraction of the cost of specialized HR platforms, with a free tier that's perfect for smaller organizations.",
+				"Cap offers a powerful onboarding tool at a fraction of the cost of specialized HR platforms, with a open-source edition that's perfect for smaller organizations.",
 		},
 		{
 			title: "Cross-Platform Accessibility",
@@ -139,7 +139,7 @@ export const employeeOnboardingContent: SeoPageContent = {
 		rows: [
 			[
 				"Upfront Cost",
-				{ text: "Free tier available", status: "positive" },
+				{ text: "Open-source edition available", status: "positive" },
 				{ text: "High monthly subscriptions", status: "negative" },
 				{ text: "Mixed (free to premium)", status: "warning" },
 			],

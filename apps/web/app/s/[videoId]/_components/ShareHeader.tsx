@@ -27,7 +27,6 @@ import { SharingDialog } from "@/app/(org)/dashboard/caps/components/SharingDial
 import type { Spaces } from "@/app/(org)/dashboard/dashboard-data";
 import { useCurrentUser } from "@/app/Layout/AuthContext";
 import { SignedImageUrl } from "@/components/SignedImageUrl";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import { usePublicEnv } from "@/utils/public-env";
 import { navigateWithTransition } from "@/utils/view-transition";
 import type { SharePageBranding, VideoData } from "../types";
@@ -78,7 +77,6 @@ export const ShareHeader = ({
 	const [displayTitle, setDisplayTitle] = useState(data.name);
 	const [editValue, setEditValue] = useState(data.name);
 	const [isTitleRevealing, setIsTitleRevealing] = useState(false);
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 	const [isSharingDialogOpen, setIsSharingDialogOpen] = useState(false);
 	const [linkCopied, setLinkCopied] = useState(false);
 	const [showCopyOptions, setShowCopyOptions] = useState(false);
@@ -311,27 +309,16 @@ export const ShareHeader = ({
 		}
 	};
 
-	const userIsOwnerAndNotPro = user?.id === data.owner.id && !data.owner.isPro;
 	const canEditVideo =
 		isOwner &&
 		!data.isScreenshot &&
 		!data.hasActiveUpload &&
 		(data.source.type === "desktopMP4" || data.source.type === "webMP4");
 	const handleEditVideo = () => {
-		if (userIsOwnerAndNotPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
-
 		navigateWithTransition("edit-enter", () => push(`/s/${data.id}/edit`));
 	};
 
 	const handleHideBranding = async () => {
-		if (!user?.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
-
 		setIsHidingBranding(true);
 
 		try {
@@ -348,11 +335,6 @@ export const ShareHeader = ({
 	};
 
 	const handleEditBranding = async () => {
-		if (!user?.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
-
 		setIsOpeningBrandingSettings(true);
 
 		try {
@@ -428,21 +410,6 @@ export const ShareHeader = ({
 
 	return (
 		<>
-			{userIsOwnerAndNotPro && (
-				<div className="flex sticky flex-col sm:flex-row inset-x-0 top-0 z-10 gap-4 justify-center items-center px-3 py-2 mx-auto w-[calc(100%-20px)] max-w-fit rounded-b-xl border bg-gray-4 border-gray-6">
-					<p className="text-center text-gray-12">
-						Shareable links are limited to 5 mins on the free plan.
-					</p>
-					<Button
-						type="button"
-						onClick={() => setUpgradeModalOpen(true)}
-						size="sm"
-						variant="blue"
-					>
-						Upgrade To Cap Pro
-					</Button>
-				</div>
-			)}
 			<SharingDialog
 				isOpen={isSharingDialogOpen}
 				onClose={() => setIsSharingDialogOpen(false)}
@@ -455,8 +422,6 @@ export const ShareHeader = ({
 				hasPassword={!!data.hasPassword}
 				inheritedPasswordSources={data.inheritedPasswordSources}
 				onPasswordUpdated={() => refresh()}
-				user={user}
-				onUpgradeRequest={setUpgradeModalOpen}
 			/>
 			<div className="mt-8">
 				<div className="flex flex-col gap-4">
@@ -549,11 +514,11 @@ export const ShareHeader = ({
 										)}
 									</div>
 								</div>
-								{userIsOwnerAndNotPro && (
+								{isOwner && (
 									<button
 										type="button"
 										className="flex items-center mt-2 mb-3 text-sm text-gray-400 duration-200 cursor-pointer hover:text-blue-500"
-										onClick={() => setUpgradeModalOpen(true)}
+										onClick={handleEditBranding}
 									>
 										<Globe2 className="mr-1 w-4 h-4" />
 										Connect a custom domain
@@ -627,10 +592,6 @@ export const ShareHeader = ({
 					</div>
 				</div>
 			</div>
-			<UpgradeModal
-				open={upgradeModalOpen}
-				onOpenChange={setUpgradeModalOpen}
-			/>
 		</>
 	);
 };

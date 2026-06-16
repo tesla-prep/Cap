@@ -39,7 +39,6 @@ import { toast } from "sonner";
 import { ConfirmationDialog } from "@/app/(org)/dashboard/_components/ConfirmationDialog";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
 import { useUploadProgress } from "@/app/s/[videoId]/_components/ProgressCircle";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import {
 	type ImageLoadingStatus,
 	VideoThumbnail,
@@ -159,8 +158,7 @@ export const CapCard = ({
 	const [copyPressed, setCopyPressed] = useState(false);
 	const [isDragging, setIsDragging] = useState(false);
 	const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
-	const { user, setUpgradeModalOpen } = useDashboardContext();
-	const [editUpgradeModalOpen, setEditUpgradeModalOpen] = useState(false);
+	const { user } = useDashboardContext();
 
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -363,19 +361,11 @@ export const CapCard = ({
 		Boolean(cap.duration && cap.duration > 0);
 	const handleEditVideo = () => {
 		if (!canEditVideo) return;
-		if (!user.isPro) {
-			setEditUpgradeModalOpen(true);
-			return;
-		}
 		router.push(`/s/${cap.id}/edit`);
 	};
 
 	return (
 		<>
-			<UpgradeModal
-				open={editUpgradeModalOpen}
-				onOpenChange={setEditUpgradeModalOpen}
-			/>
 			<SharingDialog
 				isOpen={isSharingDialogOpen}
 				onClose={() => setIsSharingDialogOpen(false)}
@@ -575,8 +565,7 @@ export const CapCard = ({
 									)}
 									<DropdownMenuItem
 										onClick={() => {
-											if (!user.isPro) setUpgradeModalOpen(true);
-											else setIsPasswordDialogOpen(true);
+											setIsPasswordDialogOpen(true);
 										}}
 										className="flex gap-2 items-center rounded-lg"
 									>

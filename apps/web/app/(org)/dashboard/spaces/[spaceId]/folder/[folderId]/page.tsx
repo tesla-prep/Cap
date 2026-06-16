@@ -14,7 +14,6 @@ import {
 	getFolderById,
 	getVideosByFolderId,
 } from "@/lib/folder";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
 import { canManageSpace } from "@/lib/permissions/roles";
 import { runPromise } from "@/lib/server";
 import {
@@ -61,7 +60,6 @@ const FolderPage = async (props: {
 			breadcrumb,
 			videosData,
 			currentFolder,
-			ownerIsPro,
 			managementAccess,
 			orgAccess,
 		] = yield* Effect.all(
@@ -80,7 +78,6 @@ const FolderPage = async (props: {
 						: { variant: "org", organizationId: spaceOrOrg.organization.id },
 				),
 				getFolderById(params.folderId),
-				Effect.promise(() => isOrganizationOwnerPro(orgId)),
 				spaceManagementAccess,
 				orgManagementAccess,
 			],
@@ -117,7 +114,6 @@ const FolderPage = async (props: {
 						collectionId={params.folderId}
 						isPublic={currentFolder.public}
 						canManage={canManageCollection}
-						isPro={ownerIsPro}
 						settings={
 							canManageCollection
 								? (currentFolder.settings?.publicPage ?? null)

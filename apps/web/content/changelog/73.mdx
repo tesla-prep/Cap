@@ -12,7 +12,7 @@ image:
 * Windows capturer now runs on a dedicated thread for snappier, more reliable capture
 * Windows encoding is more resilient: automatic fallback to software H.264 when hardware `ProcessInput` fails, plus fixes to the software path
 * Auto-zoom feels smoother on fast cursor moves with refined segment generation and steadier cursor behavior (including safer cursor-actor cleanup)
-* Fixed a case where the **5-minute Studio export limit** could be enforced incorrectly
+* Fixed a case where the **Studio export limit** could be enforced incorrectly
 * Improved app icon/logo render quality in the new recording picker on Windows
 * Added minidump crash reporting (Sentry via Tauri) to help diagnose rare crashes.
 * Clearer “needs input” error handling in the desktop flow.

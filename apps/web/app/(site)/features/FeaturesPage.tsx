@@ -32,14 +32,15 @@ import {
 	faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
+import type { ComponentProps } from "react";
+
+type FeatureIcon = ComponentProps<typeof FontAwesomeIcon>["icon"];
 
 interface Feature {
-	icon: any;
+	icon: FeatureIcon;
 	title: string;
 	description: string;
 	category: "recording" | "ai" | "sharing" | "editing" | "platform" | "privacy";
-	isPro?: boolean;
 	isComingSoon?: boolean;
 	size?: "small" | "medium" | "large";
 }
@@ -121,14 +122,12 @@ const features: Feature[] = [
 		title: "AI-Generated Titles",
 		description: "Automatically generate engaging titles for your recordings",
 		category: "ai",
-		isPro: true,
 	},
 	{
 		icon: faMagic,
 		title: "Smart Summaries",
 		description: "Get AI-powered summaries of your recording content instantly",
 		category: "ai",
-		isPro: true,
 		size: "medium",
 	},
 	{
@@ -137,14 +136,12 @@ const features: Feature[] = [
 		description:
 			"Auto-generated chapter markers for easy navigation through long recordings",
 		category: "ai",
-		isPro: true,
 	},
 	{
 		icon: faComments,
 		title: "Automatic Transcriptions",
 		description: "Accurate transcriptions generated for every recording",
 		category: "ai",
-		isPro: true,
 		size: "medium",
 	},
 	{
@@ -169,7 +166,6 @@ const features: Feature[] = [
 		description:
 			"Store all your recordings in the cloud with no storage limits",
 		category: "sharing",
-		isPro: true,
 		size: "medium",
 	},
 	{
@@ -184,21 +180,18 @@ const features: Feature[] = [
 		title: "Password Protection",
 		description: "Secure your sensitive recordings with password protection",
 		category: "sharing",
-		isPro: true,
 	},
 	{
 		icon: faChartLine,
 		title: "Viewer Analytics",
 		description: "Track views, engagement, and watch time for your recordings",
 		category: "sharing",
-		isPro: true,
 	},
 	{
 		icon: faUsers,
 		title: "Team Workspaces",
 		description: "Collaborate with your team in organized workspaces",
 		category: "sharing",
-		isPro: true,
 	},
 	{
 		icon: faComments,
@@ -211,7 +204,6 @@ const features: Feature[] = [
 		title: "Custom Domain",
 		description: "Share recordings from your own domain (cap.yourdomain.com)",
 		category: "sharing",
-		isPro: true,
 	},
 	{
 		icon: faCode,
@@ -225,7 +217,6 @@ const features: Feature[] = [
 		title: "Custom S3 Bucket",
 		description: "Use your own S3 storage for complete data ownership",
 		category: "privacy",
-		isPro: true,
 	},
 	{
 		icon: faShieldAlt,
@@ -311,7 +302,6 @@ const features: Feature[] = [
 		description:
 			"Integrate Cap into your workflow with webhooks and API access",
 		category: "platform",
-		isPro: true,
 		isComingSoon: true,
 		size: "medium",
 	},
@@ -320,7 +310,6 @@ const features: Feature[] = [
 		title: "AI Video Search",
 		description: "Search through your recordings using natural language",
 		category: "ai",
-		isPro: true,
 		isComingSoon: true,
 	},
 ];
@@ -375,7 +364,7 @@ export const FeaturesPage = () => {
 							size="lg"
 							className="flex justify-center items-center w-full font-medium text-md sm:w-auto"
 						>
-							Upgrade to Cap Pro
+							Get started
 						</Button>
 					</div>
 				</div>
@@ -383,7 +372,7 @@ export const FeaturesPage = () => {
 
 			<div className="pb-32 wrapper">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[minmax(200px,_auto)] grid-flow-dense">
-					{features.map((feature, index) => {
+					{features.map((feature) => {
 						const sizeClasses = {
 							small: "col-span-1",
 							medium: "col-span-1 md:col-span-2",
@@ -392,7 +381,7 @@ export const FeaturesPage = () => {
 
 						return (
 							<div
-								key={index}
+								key={feature.title}
 								className={`
                   ${sizeClasses[feature.size || "small"]}
                   group relative overflow-hidden rounded-xl border p-6
@@ -413,14 +402,6 @@ export const FeaturesPage = () => {
 
 								<h3 className="mb-2 text-lg font-semibold text-gray-12">
 									{feature.title}
-									{feature.isPro && (
-										<Link
-											href="/pricing"
-											className="inline-flex items-center px-2 py-1 ml-2 text-xs font-medium text-white bg-gradient-to-br from-blue-400 to-blue-600 rounded-full transition-all duration-200 hover:from-blue-500 hover:to-blue-700"
-										>
-											Cap Pro
-										</Link>
-									)}
 									{feature.isComingSoon && (
 										<span className="px-2 py-1 ml-2 text-xs font-medium rounded-full bg-gray-3 text-gray-10">
 											SOON

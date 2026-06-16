@@ -132,7 +132,7 @@ export const selfHostedScreenRecordingContent: SeoPageContent = {
 				{ text: "Paid only", status: "warning" },
 			],
 			[
-				"Free tier",
+				"Open-source edition",
 				{ text: "Yes — Studio Mode", status: "positive" },
 				{ text: "Limited", status: "warning" },
 				{ text: "Limited", status: "warning" },

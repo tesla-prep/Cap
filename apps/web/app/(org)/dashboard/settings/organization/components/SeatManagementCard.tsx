@@ -106,9 +106,9 @@ export function SeatManagementCard() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Pro Seats</CardTitle>
+				<CardTitle>Team seats</CardTitle>
 				<CardDescription>
-					Manage how many Pro seats are available for your team.
+					Manage how many seats are available for your team.
 				</CardDescription>
 			</CardHeader>
 			<div className="flex flex-col gap-5 mt-4">
@@ -116,7 +116,7 @@ export function SeatManagementCard() {
 					<span>
 						<span className="font-medium text-gray-12">{proSeatsUsed}</span> of{" "}
 						<span className="font-medium text-gray-12">{proSeatsTotal}</span>{" "}
-						Pro seats assigned
+						seats assigned
 					</span>
 				</div>
 

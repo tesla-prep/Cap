@@ -3175,10 +3175,6 @@ async fn upload_exported_video(
     let metadata = build_video_meta(&file_path)
         .map_err(|err| format!("Error getting output video meta: {err}"))?;
 
-    if !auth.is_upgraded() && metadata.duration_in_secs > 300.0 {
-        return Ok(UploadResult::UpgradeRequired);
-    }
-
     channel.send(UploadProgress { progress: 0.0 }).ok();
 
     let s3_config = match async {
@@ -3288,11 +3284,6 @@ async fn upload_screenshot(
         AuthStore::set(&app, None).map_err(|e| e.to_string())?;
         return Ok(UploadResult::NotAuthenticated);
     };
-
-    if !auth.is_upgraded() {
-        ShowCapWindow::Upgrade.show(&app).await.ok();
-        return Ok(UploadResult::UpgradeRequired);
-    }
 
     println!("Uploading screenshot: {screenshot_path:?}");
 
@@ -3600,7 +3591,7 @@ async fn check_upgraded_and_update(app: AppHandle) -> Result<bool, String> {
         .get("upgraded")
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
-    println!("Pro status: {is_pro}");
+    println!("Subscription status: {is_pro}");
     let updated_auth = AuthStore {
         secret: auth.secret,
         user_id: auth.user_id,
@@ -3882,6 +3873,10 @@ async fn editor_delete_project(
 #[specta::specta]
 #[instrument(skip(app))]
 async fn show_window(app: AppHandle, window: ShowCapWindow) -> Result<(), String> {
+    if matches!(window, ShowCapWindow::Upgrade) {
+        return Ok(());
+    }
+
     if matches!(window, ShowCapWindow::Camera { .. }) {
         let operation_lock = app.state::<CameraWindowOperationLock>();
         let _operation_guard = operation_lock.lock().await;
