@@ -38,9 +38,12 @@ export function handleRecordingResult(
 					commands.setRecordingMode("studio");
 				}
 			} else if (result === "UpgradeRequired")
-				await dialog.message("Recording could not be started for this account.", {
-					title: "Error starting recording",
-				});
+				await dialog.message(
+					"Recording could not be started for this account.",
+					{
+						title: "Error starting recording",
+					},
+				);
 			else
 				await dialog.message(`Error: ${result}`, {
 					title: "Error starting recording",

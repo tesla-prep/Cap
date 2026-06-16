@@ -29,8 +29,8 @@ export const TermsPage = () => {
 							<br />
 							Cap provides a platform that allows users to record their screen
 							and webcam, edit their recordings, generate shareable links, and
-							collaborate with others through "Spaces." We offer a open-source edition
-							with usage limits and hosted plans.
+							collaborate with others through "Spaces." We offer a open-source
+							edition with usage limits and hosted plans.
 						</li>
 						<li>
 							<h3>User Accounts</h3>

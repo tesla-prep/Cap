@@ -271,9 +271,9 @@ const CapSettingsCard = () => {
 						</div>
 						<Switch
 							disabled={
-								((option.value === "disableSummary" ||
+								(option.value === "disableSummary" ||
 									option.value === "disableChapters") &&
-									settings?.disableTranscript)
+								settings?.disableTranscript
 							}
 							onCheckedChange={() => {
 								handleToggle(option.value);

@@ -305,7 +305,9 @@ const resolvePublicCollection = cache(
 
 		if (!candidate) return null;
 
-		const publicPage = resolveEffectivePublicPage(candidate.settings?.publicPage);
+		const publicPage = resolveEffectivePublicPage(
+			candidate.settings?.publicPage,
+		);
 		const icons = await resolveIconUrls(
 			publicPageIconKeys(publicPage, {
 				organizationIconUrl: candidate.organizationIconUrl,

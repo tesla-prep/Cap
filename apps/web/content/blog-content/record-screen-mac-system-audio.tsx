@@ -193,8 +193,7 @@ export const recordScreenMacContent = {
 			"Cap makes recording your Mac screen with system audio incredibly simple. No complex audio routing, no expensive software.",
 		buttonText: "Download Cap",
 		buttonLink: "/download",
-		subtitle:
-			"Download Cap for macOS – free forever • Open-source",
+		subtitle: "Download Cap for macOS – free forever • Open-source",
 	},
 
 	relatedLinks: [
