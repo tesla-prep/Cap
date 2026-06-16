@@ -88,6 +88,11 @@ Additionally, `unused_must_use = "deny"` applies to all Rust code: every `Result
 - macOS note: desktop permissions (screen/mic) apply to the terminal running `pnpm dev:desktop`.
 - All other agent-facing rules (comments policy, no editing generated files, clippy/Biome shape, post-edit gates) live in **Pre-Generation Invariants** at the top of this file.
 
+## Fork Deployment
+- This repository is maintained as a fork.
+- The fork is deployed on the Nebius server at `204.12.163.253`.
+- Host all updates on that Nebius server and verify user-visible behavior against the real databases there before declaring the work complete.
+
 ## Deep Investigation Default
 When asked to inspect, review, optimize, secure, or fix something, do not stop at the obvious local change. First trace the full path and run a second-pass blast-radius review:
 
