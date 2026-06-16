@@ -230,9 +230,9 @@ function CapDevtools() {
 		<div className="flex flex-col p-4 space-y-4">
 			<h1 className="text-2xl font-semibold">Cap Devtools</h1>
 			<div className="space-y-2">
-				<h1 className="text-lg font-semibold">Cap Pro</h1>
+				<h1 className="text-lg font-semibold">Subscription</h1>
 				<p className="text-xs text-muted-foreground">
-					Toggle the current user's Pro status (dev only)
+					Toggle the current user's subscription status (dev only)
 				</p>
 				<div className="flex items-center space-x-2">
 					<form action={promoteToPro}>
@@ -240,7 +240,7 @@ function CapDevtools() {
 							type="submit"
 							className="px-2 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
 						>
-							Promote to Pro
+							Enable subscription
 						</button>
 					</form>
 					<form action={demoteFromPro}>
@@ -248,7 +248,7 @@ function CapDevtools() {
 							type="submit"
 							className="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
 						>
-							Demote from Pro
+							Disable subscription
 						</button>
 					</form>
 				</div>

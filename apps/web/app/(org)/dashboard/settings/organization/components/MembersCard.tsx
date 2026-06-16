@@ -1,6 +1,5 @@
 "use client";
 
-import { buildEnv } from "@cap/env";
 import {
 	Button,
 	Card,
@@ -8,7 +7,6 @@ import {
 	CardHeader,
 	CardTitle,
 	Select,
-	Switch,
 	Table,
 	TableBody,
 	TableCell,
@@ -25,7 +23,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { removeOrganizationInvite } from "@/actions/organization/remove-invite";
 import { removeOrganizationMember } from "@/actions/organization/remove-member";
-import { toggleProSeat } from "@/actions/organization/toggle-pro-seat";
 import { updateOrganizationMemberRole } from "@/actions/organization/update-member-role";
 import { ConfirmationDialog } from "@/app/(org)/dashboard/_components/ConfirmationDialog";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
@@ -33,13 +30,11 @@ import {
 	type AssignableOrganizationRole,
 	canChangeOrganizationMemberRole,
 	canManageOrganizationMembers,
-	canManageOrganizationProSeats,
 	canRemoveOrganizationMember,
 	getEffectiveOrganizationRole,
 	normalizeAssignableOrganizationRole,
 	organizationRoleLabel,
 } from "@/lib/permissions/roles";
-import { calculateSeats } from "@/utils/organization";
 
 interface MembersCardProps {
 	setIsInviteDialogOpen: (isOpen: boolean) => void;
@@ -48,7 +43,6 @@ interface MembersCardProps {
 export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 	const router = useRouter();
 	const { activeOrganization, user } = useDashboardContext();
-	const { proSeatsRemaining } = calculateSeats(activeOrganization || {});
 	const currentMember = activeOrganization?.members.find(
 		(member) => member.userId === user.id,
 	);
@@ -58,7 +52,6 @@ export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 		memberRole: currentMember?.role,
 	});
 	const canManageMembers = canManageOrganizationMembers(currentRole);
-	const canManageProSeats = canManageOrganizationProSeats(currentRole);
 
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [pendingMember, setPendingMember] = useState<{
@@ -150,34 +143,6 @@ export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 		},
 	});
 
-	const toggleProSeatMutation = useMutation({
-		mutationFn: ({
-			memberId,
-			enable,
-		}: {
-			memberId: string;
-			enable: boolean;
-		}) => {
-			if (!activeOrganization?.organization.id) {
-				throw new Error("Organization not found");
-			}
-			return toggleProSeat(
-				memberId,
-				activeOrganization.organization.id,
-				enable,
-			);
-		},
-		onSuccess: (_data, { enable }) => {
-			toast.success(enable ? "Pro seat assigned" : "Pro seat removed");
-			router.refresh();
-		},
-		onError: (error) => {
-			toast.error(
-				error instanceof Error ? error.message : "Failed to update Pro seat",
-			);
-		},
-	});
-
 	const handleRemoveMember = (member: {
 		id: string;
 		user: { name: string; email: string };
@@ -247,7 +212,6 @@ export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 							<TableHead>Member</TableHead>
 							<TableHead>Email</TableHead>
 							<TableHead>Role</TableHead>
-							{buildEnv.NEXT_PUBLIC_IS_CAP && <TableHead>Pro</TableHead>}
 							<TableHead>Joined</TableHead>
 							<TableHead>Status</TableHead>
 							<TableHead>Actions</TableHead>
@@ -308,30 +272,6 @@ export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 											/>
 										)}
 									</TableCell>
-									{buildEnv.NEXT_PUBLIC_IS_CAP && (
-										<TableCell>
-											{memberIsOwner ? (
-												<span className="text-xs text-gray-10">-</span>
-											) : (
-												<Switch
-													checked={member.hasProSeat}
-													onCheckedChange={(checked) =>
-														toggleProSeatMutation.mutate({
-															memberId: member.id,
-															enable: checked,
-														})
-													}
-													disabled={
-														!canManageProSeats ||
-														(toggleProSeatMutation.isPending &&
-															toggleProSeatMutation.variables?.memberId ===
-																member.id) ||
-														(!member.hasProSeat && proSeatsRemaining <= 0)
-													}
-												/>
-											)}
-										</TableCell>
-									)}
 									<TableCell>
 										{format(member.createdAt, "MMM d, yyyy")}
 									</TableCell>
@@ -377,7 +317,6 @@ export const MembersCard = ({ setIsInviteDialogOpen }: MembersCardProps) => {
 											"member",
 									)}
 								</TableCell>
-								{buildEnv.NEXT_PUBLIC_IS_CAP && <TableCell>-</TableCell>}
 								<TableCell>-</TableCell>
 								<TableCell>Invited</TableCell>
 								<TableCell>

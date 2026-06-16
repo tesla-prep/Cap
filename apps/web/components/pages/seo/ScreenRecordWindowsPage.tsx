@@ -1,7 +1,6 @@
 "use client";
 
 import { Clapperboard, Zap } from "lucide-react";
-import Script from "next/script";
 import { SeoPageTemplate } from "../../seo/SeoPageTemplate";
 import type { SeoPageContent } from "../../seo/types";
 
@@ -230,7 +229,7 @@ export const screenRecordWindowsContent: SeoPageContent = {
 		{
 			question: "Is Cap really a free screen recorder for Windows?",
 			answer:
-				"Yes. Cap is 100% free to use locally on Windows with no watermarks, no time limits, and no feature gates. It is open source so you can inspect the code yourself. Cap Pro is available for teams that want cloud storage and advanced sharing, but the core <a href='/free-screen-recorder'>free screen recorder</a> is fully functional.",
+				"Yes. Cap is 100% free to use locally on Windows with no watermarks, no time limits, and no feature gates. It is open source so you can inspect the code yourself. Hosted team workflows add cloud storage and advanced sharing, but the core <a href='/free-screen-recorder'>free screen recorder</a> is fully functional.",
 		},
 		{
 			question: "Can I record my screen with audio on Windows?",
@@ -255,7 +254,7 @@ export const screenRecordWindowsContent: SeoPageContent = {
 		{
 			question: "Does Cap add a watermark to recordings?",
 			answer:
-				"No. Cap never adds watermarks to your recordings, even on the free plan. Your screen recordings are clean and professional, ready to share with clients, teammates, or your audience.",
+				"No. Cap never adds watermarks to your recordings, even on the open-source edition. Your screen recordings are clean and professional, ready to share with clients, teammates, or your audience.",
 		},
 		{
 			question: "Can I use Cap for recording gameplay on Windows?",
@@ -323,18 +322,10 @@ const createSoftwareAppStructuredData = () => {
 export const ScreenRecordWindowsPage = () => {
 	return (
 		<>
-			<Script
-				id="faq-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: createFaqStructuredData() }}
-			/>
-			<Script
-				id="software-app-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{
-					__html: createSoftwareAppStructuredData(),
-				}}
-			/>
+			<script type="application/ld+json">{createFaqStructuredData()}</script>
+			<script type="application/ld+json">
+				{createSoftwareAppStructuredData()}
+			</script>
 			<SeoPageTemplate content={screenRecordWindowsContent} />
 		</>
 	);

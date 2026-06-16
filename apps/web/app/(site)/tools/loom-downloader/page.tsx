@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 	title:
 		"Loom Video Downloader — Download Loom Videos Free + Migrate to Cap | Cap",
 	description:
-		"Download any Loom video for free with Cap's online Loom video downloader. Then migrate your entire Loom library to Cap — the open source Loom alternative — with 20% off using code MIGRATE20.",
+		"Download any Loom video for free with Cap's online Loom video downloader. Then migrate your entire Loom library to Cap, the open source Loom alternative.",
 	keywords: [
 		"loom video downloader",
 		"download loom video",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: "Loom Video Downloader — Free Download + Migrate to Cap",
 		description:
-			"Download any Loom video for free. Then migrate your whole Loom library to Cap and save 20% with MIGRATE20. Built by Cap, the open source Loom alternative.",
+			"Download any Loom video for free. Then migrate your whole Loom library to Cap. Built by Cap, the open source Loom alternative.",
 		url: "https://cap.so/tools/loom-downloader",
 		siteName: "Cap",
 		type: "website",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 		title: "Loom Video Downloader — Free Download + Migrate to Cap",
 		description:
-			"Download any Loom video for free — then migrate your whole library to Cap with 20% off using MIGRATE20.",
+			"Download any Loom video for free, then migrate your whole library to Cap.",
 		images: ["/og.png"],
 	},
 	alternates: {
@@ -58,10 +58,10 @@ export const metadata: Metadata = {
 const pageContent: ToolPageContent = {
 	title: "Loom Video Downloader",
 	description:
-		"Download any public Loom video as an MP4 — or skip the one-by-one downloads and migrate your whole Loom library to Cap with 20% off using code MIGRATE20.",
+		"Download any public Loom video as an MP4, or skip the one-by-one downloads and migrate your whole Loom library to Cap.",
 	featuresTitle: "Download Loom videos, then move your whole library to Cap",
 	featuresDescription:
-		"Cap's Loom downloader is free, fast, and requires zero setup. When you're ready to leave Loom for good, Cap Pro's built-in <a href=\"/loom-alternative\">Loom video importer</a> moves your entire workspace in one click.",
+		"Cap's Loom downloader is free, fast, and requires zero setup. When you're ready to leave Loom for good, Cap's built-in <a href=\"/loom-alternative\">Loom video importer</a> moves your entire workspace in one click.",
 	features: [
 		{
 			title: "Instant Downloads",
@@ -81,12 +81,12 @@ const pageContent: ToolPageContent = {
 		{
 			title: "Import Your Whole Loom Library",
 			description:
-				'Cap Pro includes a built-in <a href="/loom-alternative">Loom video importer</a> that transfers every Loom video you\'ve recorded — titles, transcripts, and chapters included — without manual re-uploads.',
+				'Cap includes a built-in <a href="/loom-alternative">Loom video importer</a> that transfers every Loom video you\'ve recorded — titles, transcripts, and chapters included — without manual re-uploads.',
 		},
 		{
-			title: "Half the Price of Loom",
+			title: "Own Your Video Workflow",
 			description:
-				"Cap Pro starts from just $8.16/user/month vs Loom's $18/user/month. Use code <strong>MIGRATE20</strong> at checkout for an extra 20% off your first year.",
+				"Use Cap as the open source Loom alternative with instant share links, team workspaces, and storage options you control.",
 		},
 		{
 			title: "Open Source & Privacy-First",
@@ -106,19 +106,14 @@ const pageContent: ToolPageContent = {
 				"Yes, 100% free with no limits. There's no signup required, no premium tier, and no cap on the number of videos you can download.",
 		},
 		{
-			question: "What is MIGRATE20 and how do I use it?",
+			question: "Can I import my Loom library into Cap?",
 			answer:
-				'<strong>MIGRATE20</strong> is a 20% discount code for new Cap Pro subscribers who are switching from Loom. Just apply it at <a href="/pricing">checkout on the pricing page</a> to take 20% off your first year of Cap Pro — including the built-in Loom video importer.',
-		},
-		{
-			question: "Can I import all my Loom videos into Cap at once?",
-			answer:
-				'Yes. Cap Pro\'s built-in <a href="/loom-alternative">Loom video importer</a> connects to your Loom workspace and transfers every video in one go — titles, transcripts, chapters, and all — without you having to download and re-upload anything manually.',
+				'Yes. Cap\'s built-in <a href="/loom-alternative">Loom video importer</a> connects to your Loom workspace and transfers every video in one go — titles, transcripts, chapters, and all — without manual download and re-upload steps.',
 		},
 		{
 			question: "Why migrate from Loom to Cap?",
 			answer:
-				"Cap is the open source Loom alternative built for teams that care about data ownership and price. You get unlimited cloud storage, instant shareable links, AI captions, custom domains, and your own S3 bucket — all from $8.16/user/month vs Loom's $18/user/month. Use MIGRATE20 for an additional 20% off.",
+				"Cap is the open source Loom alternative built for teams that care about data ownership. You get instant shareable links, AI captions, custom domains, and storage options you can control.",
 		},
 		{
 			question: "Can I download private Loom videos?",
@@ -144,10 +139,9 @@ const pageContent: ToolPageContent = {
 	cta: {
 		title: "Ready to leave Loom for good?",
 		description:
-			"Skip the one-by-one downloads. Cap Pro imports your entire Loom library in one click — and costs half what Loom charges. Use MIGRATE20 at checkout for an extra 20% off your first year.",
-		buttonText: "Migrate to Cap Pro — save 20%",
-		buttonHref:
-			"/pricing?promo=MIGRATE20&utm_source=loom-downloader&utm_campaign=migrate20",
+			"Skip the one-by-one downloads. Cap imports your entire Loom library in one click and keeps your videos in one workspace.",
+		buttonText: "Migrate from Loom",
+		buttonHref: "/dashboard/import",
 		secondaryButtonText: "Download Cap free",
 		secondaryButtonHref: "/download",
 	},
@@ -165,12 +159,9 @@ const breadcrumbSchema = createBreadcrumbSchema([
 export default function LoomDownloaderPage() {
 	return (
 		<>
-			<script
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(breadcrumbSchema),
-				}}
-			/>
+			<script type="application/ld+json">
+				{JSON.stringify(breadcrumbSchema)}
+			</script>
 			<ToolsPageTemplate
 				content={pageContent}
 				toolComponent={<LoomDownloader />}

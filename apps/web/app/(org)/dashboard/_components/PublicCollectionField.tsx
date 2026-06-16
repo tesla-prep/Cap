@@ -15,8 +15,6 @@ interface PublicCollectionFieldProps {
 	kind: "folder" | "space";
 	enabled: boolean;
 	onChange: (enabled: boolean) => void;
-	isPro: boolean;
-	onUpgrade: () => void;
 	collectionId?: string;
 	disabled?: boolean;
 }
@@ -25,8 +23,6 @@ export const PublicCollectionField = ({
 	kind,
 	enabled,
 	onChange,
-	isPro,
-	onUpgrade,
 	collectionId,
 	disabled,
 }: PublicCollectionFieldProps) => {
@@ -57,11 +53,6 @@ export const PublicCollectionField = ({
 							<p className="text-sm font-medium text-gray-12">
 								Public collection link
 							</p>
-							{!isPro && (
-								<span className="rounded-full bg-blue-11 px-1.5 py-0.5 text-[10px] font-medium leading-none text-white">
-									Pro
-								</span>
-							)}
 						</div>
 						<p className="text-xs text-gray-10">
 							Anyone with the link can browse public caps in this {kind}.
@@ -71,13 +62,7 @@ export const PublicCollectionField = ({
 				<Switch
 					checked={enabled}
 					disabled={disabled}
-					onCheckedChange={(checked) => {
-						if (checked && !isPro) {
-							onUpgrade();
-							return;
-						}
-						onChange(checked);
-					}}
+					onCheckedChange={onChange}
 				/>
 			</div>
 			{enabled && collectionId && (

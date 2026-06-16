@@ -75,7 +75,7 @@ export const SettingsDialog = ({
 	settingsData,
 	inheritedSpaceSettings,
 }: SettingsDialogProps) => {
-	const { user, organizationSettings } = useDashboardContext();
+	const { organizationSettings } = useDashboardContext();
 	const [saveLoading, setSaveLoading] = useState(false);
 	const buildSettings = useCallback(
 		(data?: OrganizationSettings): OrganizationSettings => ({
@@ -190,19 +190,9 @@ export const SettingsDialog = ({
 								key={option.value}
 								className="flex gap-10 justify-between items-center p-4 rounded-xl border transition-colors min-w-fit border-gray-3 bg-gray-1"
 							>
-								<div
-									className={clsx(
-										"flex flex-col flex-1",
-										option.pro && "gap-1",
-									)}
-								>
+								<div className="flex flex-col flex-1">
 									<div className="flex gap-1.5 items-center flex-wrap">
 										<p className="text-sm text-gray-12">{option.label}</p>
-										{option.pro && (
-											<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
-												Pro
-											</p>
-										)}
 										{effectiveValue && (
 											<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-gray-11 bg-gray-5">
 												{inheritedLabel ??
@@ -215,7 +205,6 @@ export const SettingsDialog = ({
 								<Switch
 									disabled={
 										Boolean(inheritedLabel) ||
-										(option.pro && !user.isPro) ||
 										((key === "disableSummary" || key === "disableChapters") &&
 											getEffectiveValue("disableTranscript"))
 									}

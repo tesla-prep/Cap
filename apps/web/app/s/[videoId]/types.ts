@@ -22,7 +22,6 @@ export type VideoData = Omit<typeof videos.$inferSelect, "ownerId"> & {
 
 export type VideoOwner = {
 	id: User.UserId;
-	isPro: boolean;
 	name?: string | null;
 	image?: ImageUpload.ImageUrl | null;
 };

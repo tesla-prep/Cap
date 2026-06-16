@@ -13,7 +13,6 @@ import {
 import { eq, sql } from "drizzle-orm";
 import { Effect, Option } from "effect";
 import { revalidatePath } from "next/cache";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
 import { canManageSpace } from "@/lib/permissions/roles";
 import { sanitizeFile } from "@/lib/sanitizeFile";
 import { runPromise } from "@/lib/server";
@@ -59,11 +58,6 @@ async function readFilePayload(
 	});
 }
 
-/**
- * Uploads (or removes) the custom logo shown on a collection's public page.
- * Publishing/customizing collections is a Pro entitlement, so this mirrors the
- * Pro gate enforced on the rest of the public-page settings.
- */
 export async function setCollectionLogo(formData: FormData) {
 	const user = await getCurrentUser();
 	if (!user) return { success: false, error: "Unauthorized" };
@@ -106,13 +100,6 @@ async function setSpaceLogo(
 	// propagate instead of being misreported as "Unauthorized".
 	const access = await getSpaceAccess(userId, id);
 	if (!access?.canManage) return { success: false, error: "Unauthorized" };
-
-	if (!(await isOrganizationOwnerPro(space.organizationId))) {
-		return {
-			success: false,
-			error: "Upgrade to Cap Pro to customize the collection logo",
-		};
-	}
 
 	const existing = space.settings ?? {};
 
@@ -178,13 +165,6 @@ async function setFolderLogo(
 				})
 			: ((await getSpaceAccess(userId, folder.spaceId))?.canManage ?? false);
 	if (!canManage) return { success: false, error: "Unauthorized" };
-
-	if (!(await isOrganizationOwnerPro(folder.organizationId))) {
-		return {
-			success: false,
-			error: "Upgrade to Cap Pro to customize the collection logo",
-		};
-	}
 
 	const existing = folder.settings ?? {};
 

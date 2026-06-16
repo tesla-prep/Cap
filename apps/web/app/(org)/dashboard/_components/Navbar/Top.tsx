@@ -1,6 +1,5 @@
 "use client";
 
-import { buildEnv } from "@cap/env";
 import {
 	Command,
 	CommandGroup,
@@ -33,10 +32,8 @@ import {
 import { markAsRead } from "@/actions/notifications/mark-as-read";
 import Notifications from "@/app/(org)/dashboard/_components/Notifications";
 import { SignedImageUrl } from "@/components/SignedImageUrl";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import { useDashboardContext, useTheme } from "../../Contexts";
 import {
-	ArrowUpIcon,
 	DownloadIcon,
 	HomeIcon,
 	LogoutIcon,
@@ -177,7 +174,6 @@ const Top = () => {
 
 const User = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 	const { user } = useDashboardContext();
 	const { theme, setThemeHandler } = useTheme();
 	const nextTheme = theme === "light" ? "dark" : "light";
@@ -193,16 +189,6 @@ const User = () => {
 				onClick: () => setMenuOpen(false),
 				iconClassName: "text-gray-11 group-hover:text-gray-12",
 				showCondition: true,
-			},
-			{
-				name: "Upgrade to Pro",
-				icon: <ArrowUpIcon />,
-				onClick: () => {
-					setMenuOpen(false);
-					setUpgradeModalOpen(true);
-				},
-				iconClassName: "text-amber-400 group-hover:text-amber-500",
-				showCondition: buildEnv.NEXT_PUBLIC_IS_CAP && !user.isPro,
 			},
 			{
 				name: "Earn 40% Referral",
@@ -261,15 +247,11 @@ const User = () => {
 				showCondition: true,
 			},
 		],
-		[nextTheme, setThemeHandler, themeLabel, user.isPro],
+		[nextTheme, setThemeHandler, themeLabel],
 	);
 
 	return (
 		<>
-			<UpgradeModal
-				open={upgradeModalOpen}
-				onOpenChange={setUpgradeModalOpen}
-			/>
 			<Popover open={menuOpen} onOpenChange={setMenuOpen}>
 				<PopoverTrigger asChild>
 					<div

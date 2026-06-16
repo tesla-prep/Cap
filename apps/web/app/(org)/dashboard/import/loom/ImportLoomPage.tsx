@@ -45,7 +45,6 @@ import {
 	type LoomCsvImportRowResult,
 } from "@/actions/loom";
 import { useDashboardContext } from "@/app/(org)/dashboard/Contexts";
-import { UpgradeModal } from "@/components/UpgradeModal";
 
 type Mode = "single" | "csv";
 
@@ -234,7 +233,6 @@ export const ImportLoomPage = () => {
 		!!user && user.id === activeOrganization?.organization.ownerId;
 
 	const [mode, setMode] = useState<Mode>("single");
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(!user?.isPro);
 
 	const [loomUrl, setLoomUrl] = useState("");
 	const [isImporting, setIsImporting] = useState(false);
@@ -320,11 +318,6 @@ export const ImportLoomPage = () => {
 	const handleSingleImport = async () => {
 		if (!user || !activeOrganization) return;
 
-		if (!user.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
-
 		if (!loomUrl.trim()) return;
 
 		setIsImporting(true);
@@ -366,11 +359,6 @@ export const ImportLoomPage = () => {
 
 	const loadCsvFile = async (file: File) => {
 		if (!user) return;
-
-		if (!user.isPro) {
-			setUpgradeModalOpen(true);
-			return;
-		}
 
 		if (!file.name.toLowerCase().endsWith(".csv") && file.type !== "text/csv") {
 			toast.error("Please upload a CSV file.");
@@ -984,11 +972,6 @@ export const ImportLoomPage = () => {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-
-			<UpgradeModal
-				open={upgradeModalOpen}
-				onOpenChange={setUpgradeModalOpen}
-			/>
 		</div>
 	);
 };

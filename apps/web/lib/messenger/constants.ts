@@ -85,15 +85,15 @@ PLATFORM SUPPORT:
 - Linux: not yet supported, but it's on the roadmap.
 
 PRICING (early adopter beta pricing, locked in for lifetime of subscription):
-- Free plan: personal use, Studio Mode, unlimited local recordings, shareable links up to 5 minutes, export to MP4 or GIF, web recorder
-- Desktop License: $58 one-time (lifetime) or $29/year, commercial usage rights, Studio Mode with full editor, unlimited local recordings, shareable links up to 5 minutes, export to MP4 or GIF
-- Cap Pro: $8.16/mo per user (billed annually) or $12/mo per user (billed monthly), includes everything in Desktop License plus unlimited cloud storage and bandwidth, unlimited shareable links (no 5-minute limit), auto-generated AI titles/summaries/chapters/transcriptions, custom domain (cap.yourdomain.com), password-protected shares, viewer analytics, team workspaces, Loom video importer, custom S3 bucket support, priority support
+- Personal use: Studio Mode, unlimited local recordings, shareable links, export to MP4 or GIF, web recorder
+- Desktop License: $58 one-time (lifetime) or $29/year, commercial usage rights, Studio Mode with full editor, unlimited local recordings, shareable links, export to MP4 or GIF
+- Cloud: hosted sharing and collaboration, AI titles/summaries/chapters/transcriptions, custom domain (cap.yourdomain.com), password-protected shares, viewer analytics, team workspaces, Loom video importer, custom S3 bucket support, priority support
 - Enterprise: custom pricing, contact via https://cal.com/cap.so/15min, includes SLAs, priority support, Loom video importer, bulk discounts, managed self-hosting, SAML SSO via WorkOS, advanced security controls
 - Early adopters keep their pricing forever, even after beta ends and regular prices change.
 - Student discount available at https://cap.so/student-discount
 
 RECORDING MODES (DESKTOP APP):
-1. Instant Mode: records and uploads in real-time simultaneously. When you stop recording, the shareable link is ready within seconds. AI auto-generates captions, title, summary, and chapters (Pro). Perfect for quick feedback, bug reports, and async communication. Free users limited to 5 minutes; Pro users have unlimited length.
+1. Instant Mode: records and uploads in real-time simultaneously. When you stop recording, the shareable link is ready within seconds. AI can auto-generate captions, title, summary, and chapters when enabled. Perfect for quick feedback, bug reports, and async communication.
 2. Studio Mode: records locally to your machine with no time limits. After recording, opens in the full editor with timeline, backgrounds, effects, cursor styling, text overlays, zoom, and more. Export to MP4 or GIF. Can pause/resume during recording. Supports crash-recoverable recording (fragmented segments that can be recovered if the app crashes).
 3. Screenshot Mode: capture a screenshot of your entire screen, a specific window, or a custom area. Opens in the screenshot editor with cropping, annotations (text, shapes, arrows, drawing, masking), custom backgrounds, padding, rounding, shadows, and borders. Export to file or copy to clipboard.
 
@@ -119,7 +119,7 @@ DESKTOP APP SETTINGS:
 - Delete instant recordings after upload: on/off
 - Crash-recoverable recording: on/off (fragments recording for recovery)
 - Max capture framerate: 30, 60, or 120 FPS
-- Automatically open shareable links (Pro): on/off
+- Automatically open shareable links: on/off
 - Default project name template with placeholders: {target_name}, {target_kind}, {date}, {time}, {recording_mode}, {mode}, {moment:...}
 - Excluded windows: hide specific windows from recordings (useful for hiding Cap itself or other tools)
 - Self-host server URL: point desktop app to a self-hosted Cap server
@@ -170,18 +170,18 @@ SHARING & COLLABORATION:
 - Shared video page features: video player with HLS playback, captions, quality selection, tabs for Activity (comments/analytics), Transcript, Summary, and Settings
 - Comments: timestamped text comments, threaded replies, click timestamps to seek to that point in video
 - Reactions: emoji reactions on videos
-- Password protection (Pro): set a password on any shared video, viewers must enter it to watch
-- Custom domains (Pro): use your own domain for shared links (e.g. videos.yourcompany.com), configure in organization settings with DNS verification
-- Viewer analytics (Pro): track views, unique viewers, engagement over time (24h, 7d, 30d, lifetime)
+- Password protection: set a password on any shared video, viewers must enter it to watch
+- Custom domains: use your own domain for shared links (e.g. videos.yourcompany.com), configure in organization settings with DNS verification
+- Viewer analytics: track views, unique viewers, engagement over time (24h, 7d, 30d, lifetime)
 
-AI FEATURES (CAP PRO):
+AI FEATURES (PRO):
 - Auto-generated titles: AI creates descriptive titles from video content
 - Auto-generated summaries: markdown summaries of video content
 - Auto-generated chapters: clickable timestamped chapters for easy navigation
 - Transcription: automatic speech-to-text via Deepgram, generates VTT captions, editable, downloadable, supports translation to other languages
 - All AI processing happens server-side, never on the users device
 
-LOOM IMPORT (CAP PRO):
+LOOM IMPORT (PRO):
 - Import Loom videos to Cap at https://cap.so/dashboard/import/loom
 - Paste a Loom video URL and Cap downloads and processes it
 - Imported videos appear in your dashboard like regular recordings
@@ -235,7 +235,7 @@ TROUBLESHOOTING - COMMON ISSUES:
 - Export failing: try a different compression preset. If frame decode errors occur, Cap automatically falls back to FFmpeg decoder.
 - Shared link not working: make sure the video finished uploading and processing. Check if password protection is enabled.
 - Custom domain not working: verify DNS settings in organization settings. Domain verification can take a few minutes.
-- Loom import failing: make sure the Loom video is public (not private or password-protected), the link hasnt expired, and you have an active Cap Pro subscription.
+- Loom import failing: make sure the Loom video is public (not private or password-protected), the link hasnt expired, and you have an current account access.
 - Crash recovery: if Cap crashes during a Studio Mode recording, recovered segments can be found in Settings > Recordings. Crash-recoverable recording must be enabled in settings.
 
 TROUBLESHOOTING - SIGNIN ISSUES:
@@ -260,13 +260,13 @@ FAQ:
 - Who is Cap for? Anyone who wants to record, edit, and share videos. Creators, educators, marketers, developers, remote teams.
 - Can I self-host? Yes, full self-hosting with Docker Compose.
 - What happens after beta? Early adopters keep their pricing forever.
-- Is there a commercial license? Yes, for businesses using the desktop app. Pro plan includes commercial license.
-- Can I import Loom videos? Yes, Cap Pro includes a built-in Loom importer.
+- Is there a commercial license? Yes, for businesses using the desktop app.
+- Can I import Loom videos? Yes, Paid access includes a built-in Loom importer.
 
 COMMON USER TASKS:
 - To download Cap: go to https://cap.so/download
-- To upgrade to Pro: go to https://cap.so/pricing
-- To import Loom videos: go to https://cap.so/dashboard/import/loom (requires Cap Pro)
+- To continue: go to https://cap.so/pricing
+- To import Loom videos: go to https://cap.so/dashboard/import/loom (is unavailable)
 - To view docs: go to https://cap.so/docs
 - To self-host: go to https://cap.so/self-hosting
 - To book an enterprise call: go to https://cal.com/cap.so/15min

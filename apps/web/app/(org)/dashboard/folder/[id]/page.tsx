@@ -10,7 +10,6 @@ import {
 	getFolderById,
 	getVideosByFolderId,
 } from "@/lib/folder";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
 import { runPromise } from "@/lib/server";
 
 import { CollectionShareControl } from "../../_components/CollectionShareControl";
@@ -41,17 +40,9 @@ const FolderPage = async (props: PageProps<"/dashboard/folder/[id]">) => {
 				}),
 				Effect.gen(function* () {
 					const folder = yield* getFolderById(folderId);
-					// Mirrors FoldersPolicy.canEdit for personal folders: only the
-					// creator may manage sharing; the Pro gate uses the folder's own
-					// organization, which is what the server enforces on writes.
 					const canManage =
 						folder.spaceId === null && folder.createdById === user.id;
-					const ownerIsPro = canManage
-						? yield* Effect.promise(() =>
-								isOrganizationOwnerPro(folder.organizationId),
-							)
-						: false;
-					return { folder, canManage, ownerIsPro };
+					return { folder, canManage };
 				}),
 			],
 			{ concurrency: "unbounded" },
@@ -68,7 +59,6 @@ const FolderPage = async (props: PageProps<"/dashboard/folder/[id]">) => {
 						collectionId={folderId}
 						isPublic={share.folder.public}
 						canManage={share.canManage}
-						isPro={share.ownerIsPro}
 						settings={
 							share.canManage
 								? (share.folder.settings?.publicPage ?? null)

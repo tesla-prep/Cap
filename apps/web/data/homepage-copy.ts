@@ -169,7 +169,7 @@ export const homepageCopy: HomePageCopy = {
 			{ label: "Open source", href: "/open-source-screen-recorder" },
 		],
 		cta: {
-			primaryButton: "Upgrade to Cap Pro",
+			primaryButton: "Get started",
 			secondaryButton: "View on GitHub",
 			freeVersionText:
 				"No credit card required. Record locally, share when you choose.",
@@ -298,7 +298,7 @@ export const homepageCopy: HomePageCopy = {
 	pricing: {
 		title: "Simple, Honest Pricing",
 		subtitle:
-			"Start free, upgrade when you need more. Early adopter pricing locked in forever.",
+			"Start free and choose the setup that fits your workflow.",
 		lovedBy: "Trusted by 40,000+ users",
 		commercial: {
 			title: "Desktop License",
@@ -325,9 +325,9 @@ export const homepageCopy: HomePageCopy = {
 		},
 		pro: {
 			badge: "Best value",
-			title: "Cap Pro",
+			title: "Cloud",
 			description:
-				"Everything in Desktop plus unlimited cloud features for seamless sharing and collaboration.",
+				"Everything in Desktop plus cloud features for seamless sharing and collaboration.",
 			features: [
 				"Everything in Desktop License",
 				"Unlimited cloud storage & bandwidth",
@@ -356,24 +356,24 @@ export const homepageCopy: HomePageCopy = {
 		title: "Questions? We've Got Answers.",
 		items: [
 			{
-				question: "What is the difference between Cap Pro and Desktop License?",
+				question: "What is the difference between Cloud and Desktop License?",
 				answer:
-					"Cap Pro is a paid plan that includes all the features of the Desktop License plus cloud features for seamless sharing and collaboration. Desktop License grants you commercial usage rights for a single user.",
+					"Cloud includes all the features of the Desktop License plus hosted sharing and collaboration features. Desktop License grants commercial usage rights for a single user.",
 			},
 			{
 				question: "Is there a free version?",
 				answer:
-					"Yes! Cap is 100% free for personal use. You can record and share locally with Studio Mode. A paid plan is required for commercial usage.",
+					"Yes! Cap is 100% free for personal use. You can record and share locally with Studio Mode. Commercial usage is covered by commercial licensing.",
 			},
 			{
 				question: "How long can I record for on the free version?",
 				answer:
-					"You can record for 5 minutes on the free version. After that, you'll need to upgrade to a paid plan.",
+					"Studio Mode records locally with no time limit. Hosted share links may have workspace limits depending on how your Cap instance is configured.",
 			},
 			{
 				question: "How does Cap AI work?",
 				answer:
-					"Cap AI is a powerful tool that can be used to generate titles, summaries, clickable chapters, and transcriptions for your recordings. It's available for all Cap Pro users and has no usage limits.",
+					"Cap AI can generate titles, summaries, clickable chapters, and transcriptions for your recordings when AI services are enabled.",
 			},
 			{
 				question: "How is Cap different from Loom?",
@@ -383,12 +383,12 @@ export const homepageCopy: HomePageCopy = {
 			{
 				question: "What happens to my recordings if I cancel?",
 				answer:
-					"Your recordings are yours forever. If you cancel Pro, existing shares remain active and you can always export everything. Downgrade to our free plan to keep recording locally, or self-host to maintain all features.",
+					"Your recordings are yours forever. Existing exports remain yours, and self-hosting keeps you in control of the full stack.",
 			},
 			{
 				question: "Do you offer team plans?",
 				answer:
-					"Yes! Cap Pro includes team workspaces where you can organize recordings, manage permissions, and collaborate. Volume discounts available for teams over 10 users. Contact us for custom enterprise features.",
+					"Yes! Paid access includes team workspaces where you can organize recordings, manage permissions, and collaborate. Volume discounts available for teams over 10 users. Contact us for custom enterprise features.",
 			},
 			{
 				question: "Which platforms do you support?",
@@ -398,7 +398,7 @@ export const homepageCopy: HomePageCopy = {
 			{
 				question: "Can I use Cap for commercial purposes?",
 				answer:
-					"Absolutely! Any paid plan (Desktop License or Cap Pro) includes full commercial usage rights. Use Cap for client work, sell courses, or embed recordings anywhere. The free version is for personal use only.",
+					"Absolutely. Desktop License and hosted commercial plans include commercial usage rights. Use Cap for client work, courses, or embedded recordings.",
 			},
 			{
 				question: "Is my data secure?",
@@ -408,14 +408,14 @@ export const homepageCopy: HomePageCopy = {
 			{
 				question: "What about GDPR/HIPAA compliance?",
 				answer:
-					"Cap Pro supports custom S3 buckets in any region for GDPR compliance. For HIPAA and other regulations, our self-hosted option gives you complete control. We also offer signed BAAs for enterprise customers.",
+					"Custom S3 buckets can be configured in any region for GDPR workflows. For HIPAA and other regulations, self-hosting gives you complete control. We also offer signed BAAs for enterprise customers.",
 			},
 		],
 	},
 	readyToGetStarted: {
-		title: "Ready To Upgrade How You Communicate?",
+		title: "Ready To Improve How You Communicate?",
 		buttons: {
-			primary: "Upgrade to Cap Pro",
+			primary: "Get started",
 			secondary: "Download For Free",
 		},
 	},

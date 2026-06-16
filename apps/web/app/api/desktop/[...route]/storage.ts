@@ -8,7 +8,6 @@ import {
 	videos,
 } from "@cap/database/schema";
 import { serverEnv } from "@cap/env";
-import { userIsPro } from "@cap/utils";
 import {
 	ensureGoogleDriveFolder,
 	exchangeGoogleDriveCode,
@@ -285,9 +284,6 @@ protectedApp.post(
 	async (c) => {
 		const user = c.get("user");
 		const { orgId } = c.req.valid("json");
-		if (!userIsPro(user)) {
-			return c.json({ error: "upgrade_required" }, { status: 403 });
-		}
 
 		if (orgId) {
 			const organization = await requireOrganizationOwner(user.id, orgId);

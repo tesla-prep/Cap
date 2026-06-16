@@ -16,7 +16,6 @@ export function Section(
 		title: string;
 		description?: string | JSX.Element;
 		right?: JSX.Element;
-		pro?: boolean;
 	}>,
 ) {
 	return (
@@ -27,11 +26,6 @@ export function Section(
 						<h3 class="text-sm font-semibold tracking-tight text-gray-12">
 							{props.title}
 						</h3>
-						<Show when={props.pro}>
-							<span class="text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded-md bg-blue-9 text-white">
-								Pro
-							</span>
-						</Show>
 					</div>
 					<Show when={props.description}>
 						<div class="text-xs leading-relaxed text-gray-10">

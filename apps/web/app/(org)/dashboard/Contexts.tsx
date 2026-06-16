@@ -1,6 +1,5 @@
 "use client";
 
-import { buildEnv } from "@cap/env";
 import Cookies from "js-cookie";
 import { redirect, usePathname } from "next/navigation";
 import {
@@ -12,7 +11,6 @@ import {
 } from "react";
 import { InviteDialog } from "@/app/(org)/dashboard/settings/organization/components/InviteDialog";
 import { type CurrentUser, useCurrentUser } from "@/app/Layout/AuthContext";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import type {
 	Organization,
 	OrganizationSettings,
@@ -35,8 +33,6 @@ type SharedContext = {
 	anyNewNotifications: boolean;
 	userPreferences: UserPreferences;
 	sidebarCollapsed: boolean;
-	upgradeModalOpen: boolean;
-	setUpgradeModalOpen: (open: boolean) => void;
 	inviteDialogOpen: boolean;
 	setInviteDialogOpen: (open: boolean) => void;
 	referClickedState: boolean;
@@ -97,7 +93,6 @@ export function DashboardContexts({
 	const [sidebarCollapsed, setSidebarCollapsed] = useState(
 		initialSidebarCollapsed,
 	);
-	const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
 	const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 	const [referClickedState, setReferClickedState] = useState(referClicked);
 	const [developerApps, setDeveloperApps] = useState<DeveloperApp[] | null>(
@@ -198,8 +193,6 @@ export function DashboardContexts({
 					user,
 					toggleSidebarCollapsed,
 					sidebarCollapsed,
-					upgradeModalOpen,
-					setUpgradeModalOpen,
 					inviteDialogOpen,
 					setInviteDialogOpen,
 					referClickedState,
@@ -216,12 +209,6 @@ export function DashboardContexts({
 					setIsOpen={setInviteDialogOpen}
 				/>
 
-				{buildEnv.NEXT_PUBLIC_IS_CAP && (
-					<UpgradeModal
-						open={upgradeModalOpen}
-						onOpenChange={setUpgradeModalOpen}
-					/>
-				)}
 			</DashboardContext.Provider>
 		</ThemeContext.Provider>
 	);

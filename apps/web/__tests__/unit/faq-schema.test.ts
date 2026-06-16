@@ -139,9 +139,9 @@ describe("createFAQSchema", () => {
 					"Yes, Cap is completely free, with no hidden fees. You get access to professional-grade <a href='/screen-recorder'>screen recording</a> tools without a subscription.",
 			},
 			{
-				question: "How long can I record for on the free plan?",
+				question: "How long can I record for on the open-source edition?",
 				answer:
-					"Cap's free plan allows for unlimited recording time, so you can capture your screen without interruptions.",
+					"Cap's open-source edition allows for unlimited recording time, so you can capture your screen without interruptions.",
 			},
 			{
 				question: "Can I store my recordings in the cloud?",

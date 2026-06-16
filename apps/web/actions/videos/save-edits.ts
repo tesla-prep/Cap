@@ -4,7 +4,6 @@ import { db } from "@cap/database";
 import { getCurrentUser } from "@cap/database/auth/session";
 import { videoEdits, videos, videoUploads } from "@cap/database/schema";
 import type { VideoEditSpec } from "@cap/database/types";
-import { userIsPro } from "@cap/utils";
 import { Storage } from "@cap/web-backend";
 import type { Video } from "@cap/web-domain";
 import { eq } from "drizzle-orm";
@@ -117,7 +116,6 @@ export async function saveVideoEdits(
 ) {
 	const user = await getCurrentUser();
 	if (!user) throw new Error("Unauthorized");
-	if (!userIsPro(user)) throw new Error("Cap Pro is required to edit videos");
 
 	const [video] = await db()
 		.select()

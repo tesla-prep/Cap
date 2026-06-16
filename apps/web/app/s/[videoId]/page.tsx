@@ -15,7 +15,6 @@ import {
 import type { VideoMetadata } from "@cap/database/types";
 import { buildEnv, serverEnv } from "@cap/env";
 import { Logo } from "@cap/ui";
-import { userIsPro } from "@cap/utils";
 import {
 	Database,
 	ImageUploads,
@@ -800,7 +799,6 @@ async function AuthorizedContent({
 			owner: {
 				id: video.owner.id,
 				name: video.owner.name,
-				isPro: userIsPro(video.owner),
 				image: video.owner.image
 					? yield* imageUploads.resolveImageUrl(video.owner.image)
 					: null,

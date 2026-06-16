@@ -1,7 +1,6 @@
 "use client";
 
 import { Clapperboard, Zap } from "lucide-react";
-import Script from "next/script";
 import { SeoPageTemplate } from "../../seo/SeoPageTemplate";
 import type { SeoPageContent } from "../../seo/types";
 
@@ -29,7 +28,7 @@ export const loomAlternativeContent: SeoPageContent = {
 		{
 			title: "Half the Price of Loom",
 			description:
-				"Cap stars from just $8.16/month per user, compared to Loom's $18/month per user. Plus, Cap offers a generous free plan that includes Studio mode for personal use.",
+				"Cap stars from just $8.16/month per user, compared to Loom's $18/month per user. Plus, Cap offers a generous open-source edition that includes Studio mode for personal use.",
 		},
 		{
 			title: "High-Quality Recordings",
@@ -56,13 +55,13 @@ export const loomAlternativeContent: SeoPageContent = {
 	recordingModes: {
 		title: "Two Ways to Record with Cap",
 		description:
-			"Cap gives you flexible recording options to match your workflow needs, with both modes available in the free plan",
+			"Cap gives you flexible recording options to match your workflow needs, with both modes available in the open-source edition",
 		modes: [
 			{
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Share your screen right away with a simple link—no waiting, just record and share in seconds. Record up to 5-minute shareable links for free, perfect for quick demos and explanations. Includes built-in thread commenting for easy collaboration.",
+					"Share your screen right away with a simple link—no waiting, just record and share in seconds. Record shareable links from the browser, perfect for quick demos and explanations. Includes built-in thread commenting for easy collaboration.",
 			},
 			{
 				icon: (
@@ -116,7 +115,7 @@ export const loomAlternativeContent: SeoPageContent = {
 		{
 			question: "Is there a free Loom alternative?",
 			answer:
-				"Yes, Cap offers a generous free tier that includes all essential screen recording features. You can use Studio mode completely free for personal use, record up to 5-minute shareable links, and record in up to 4K resolution. Cap's free plan offers more than Loom's free tier.",
+				"Yes, Cap offers a generous open-source edition that includes all essential screen recording features. You can use Studio mode completely free for personal use, record shareable links, and record in up to 4K resolution. Cap's open-source edition offers more than Loom's open-source edition.",
 		},
 		{
 			question: "Why choose an open-source screen recorder?",
@@ -126,7 +125,7 @@ export const loomAlternativeContent: SeoPageContent = {
 		{
 			question: "How does Cap compare in pricing with Loom?",
 			answer:
-				"Cap is significantly more affordable at just $8.16/month per user when billed annually, compared to Loom's $18/month per user. Cap also has a more generous free plan that includes Studio mode for personal use and the ability to record shareable links up to 5 minutes in 4K quality.",
+				"Cap is significantly more affordable at just $8.16/month per user when billed annually, compared to Loom's $18/month per user. Cap also has a more generous open-source edition that includes Studio mode for personal use and the ability to record shareable links in high quality.",
 		},
 		{
 			question: "Can I keep full ownership of my recordings with Cap?",
@@ -141,7 +140,7 @@ export const loomAlternativeContent: SeoPageContent = {
 		{
 			question: "Can I import my existing Loom videos into Cap?",
 			answer:
-				"Yes! Cap Pro includes a built-in Loom video importer. Simply paste your Loom video links and Cap will import them directly into your library. It's the easiest way to migrate from Loom without losing any of your existing content.",
+				"Yes! Paid access includes a built-in Loom video importer. Simply paste your Loom video links and Cap will import them directly into your library. It's the easiest way to migrate from Loom without losing any of your existing content.",
 		},
 	],
 
@@ -166,8 +165,8 @@ export const loomAlternativeContent: SeoPageContent = {
 			],
 			[
 				"4K Recording",
-				{ text: "Available in free & paid plans", status: "positive" },
-				{ text: "Only in paid plans", status: "warning" },
+				{ text: "Available in free and hosted plans", status: "positive" },
+				{ text: "Only in hosted plans", status: "warning" },
 			],
 			[
 				"Thread Commenting",
@@ -246,11 +245,7 @@ const createFaqStructuredData = () => {
 export const LoomAlternativePage = () => {
 	return (
 		<>
-			<Script
-				id="faq-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: createFaqStructuredData() }}
-			/>
+			<script type="application/ld+json">{createFaqStructuredData()}</script>
 			<SeoPageTemplate
 				showLogosInHeader
 				showLoomComparisonSlider

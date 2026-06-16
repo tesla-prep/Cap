@@ -14,11 +14,11 @@ const homePageFAQs = [
 		answer:
 			"Cap is an open-source screen recording software that offers beautiful, lightweight recordings with instant sharing capabilities. It's the privacy-focused alternative to Loom.",
 	},
-	{
-		question: "How much does Cap cost?",
-		answer:
-			"Cap offers a generous free plan with Studio mode for personal use and 5-minute shareable links. The Pro plan starts at just $8.16/month per user, which is less than half the price of Loom.",
-	},
+		{
+			question: "How much does Cap cost?",
+			answer:
+			"Cap offers a generous open-source edition with Studio Mode for personal use, plus commercial and hosted options for teams that need more control.",
+		},
 	{
 		question: "Is Cap available for Windows and Mac?",
 		answer:

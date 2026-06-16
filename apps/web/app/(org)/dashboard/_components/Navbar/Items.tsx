@@ -377,10 +377,7 @@ const AdminNavItems = ({
 					<SpacesList toggleMobileNav={() => toggleMobileNav?.()} />
 				</div>
 				<div className="pb-4 mt-auto w-full">
-					<UsageButton
-						toggleMobileNav={() => toggleMobileNav?.()}
-						subscribed={user.isPro}
-					/>
+					<UsageButton toggleMobileNav={() => toggleMobileNav?.()} />
 					{buildEnv.NEXT_PUBLIC_IS_CAP && (
 						<div className="flex justify-center items-center mt-2">
 							<Link

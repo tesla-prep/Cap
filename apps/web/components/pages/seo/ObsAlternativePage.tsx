@@ -67,7 +67,7 @@ export const obsAlternativeContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and share in one click. The moment you stop, Cap generates a shareable link and uploads your recording automatically. Perfect for bug reports, async standups, quick demos, and team updates. Free plan includes recordings up to 5 minutes.",
+					"Record and share in one click. The moment you stop, Cap generates a shareable link and uploads your recording automatically. Perfect for bug reports, async standups, quick demos, and team updates. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -146,7 +146,7 @@ export const obsAlternativeContent: SeoPageContent = {
 			],
 			[
 				"Free to use",
-				{ text: "Yes — free plan + Studio Mode", status: "positive" },
+				{ text: "Yes — open-source edition + Studio Mode", status: "positive" },
 				{ text: "Yes — fully free", status: "positive" },
 				{ text: "Limited", status: "warning" },
 				{ text: "$299.99 one-time", status: "negative" },
@@ -248,7 +248,7 @@ export const obsAlternativeContent: SeoPageContent = {
 		{
 			question: "Is Cap free like OBS?",
 			answer:
-				"Yes. Cap's Studio Mode is completely free for personal use with no time limits and no watermarks. Instant Mode on the free plan supports recordings up to 5 minutes. Cap Pro ($9.99/month) removes Instant Mode time limits and adds team features. The core software is open source and free to use, just like OBS.",
+				"Yes. Cap's Studio Mode is completely free for personal use with no time limits and no watermarks. Instant Mode supports quick browser-based recordings, while hosted team workflows add cloud features. The core software is open source and free to use, just like OBS.",
 		},
 		{
 			question: "Is Cap open source like OBS?",

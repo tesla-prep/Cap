@@ -65,7 +65,7 @@ export const macScreenRecordingWithAudioContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record your Mac screen with audio and get a shareable link the moment you stop. Perfect for quick demos, bug reports, and async team updates. Free plan includes recordings up to 5 minutes with built-in thread commenting.",
+					"Record your Mac screen with audio and get a shareable link the moment you stop. Perfect for quick demos, bug reports, and async team updates. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -174,7 +174,7 @@ export const macScreenRecordingWithAudioContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom on Mac",
 			description:
-				"Loom records Mac screen with audio and is a popular tool for async video, but it charges $18/month for professional use and adds watermarks on the free plan. Cap is significantly more affordable, fully open-source, and offers Studio Mode completely free with no watermarks. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
+				"Loom records Mac screen with audio and is a popular tool for async video, but it charges $18/month for professional use and adds watermarks on the open-source edition. Cap is significantly more affordable, fully open-source, and offers Studio Mode completely free with no watermarks. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
 		},
 	],
 
@@ -251,7 +251,7 @@ export const macScreenRecordingWithAudioContent: SeoPageContent = {
 		{
 			question: "Is there a free way to record Mac screen with audio?",
 			answer:
-				"Yes. Cap is completely free for Mac screen recording with audio. Studio Mode has no time limits, no watermarks, and no fees. Instant Mode on the free plan supports recordings up to 5 minutes with shareable links. <a href='/free-screen-recorder'>Download Cap free</a> and start recording your Mac with audio today.",
+				"Yes. Cap is completely free for Mac screen recording with audio. Studio Mode has no time limits, no watermarks, and no fees. Instant Mode supports quick shareable recordings with shareable links. <a href='/free-screen-recorder'>Download Cap free</a> and start recording your Mac with audio today.",
 		},
 		{
 			question: "Does Cap record Mac screen with audio in 4K?",

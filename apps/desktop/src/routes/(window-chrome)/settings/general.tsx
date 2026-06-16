@@ -119,8 +119,6 @@ const MAX_FPS_OPTIONS = [
 
 const DEFAULT_PROJECT_NAME_TEMPLATE =
 	"{target_name} ({target_kind}) {date} {time}";
-const FREE_INSTANT_MODE_MAX_RESOLUTION = 1280;
-const PRO_INSTANT_MODE_MAX_RESOLUTION = 1920;
 
 export default function GeneralSettings() {
 	const [store] = createResource(() => generalSettingsStore.get());
@@ -209,16 +207,6 @@ function AppearanceSection(props: {
 function Inner(props: { initialStore: GeneralSettingsStore | null }) {
 	const [settings, setSettings] = createStore<ExtendedGeneralSettingsStore>(
 		deriveGeneralSettings(props.initialStore),
-	);
-	const auth = authStore.createQuery();
-	const hasCapPro = createMemo(() => {
-		const plan = auth.data?.plan;
-		return !!plan && (plan.upgraded || plan.manual);
-	});
-	const instantModeMaxResolution = createMemo(() =>
-		hasCapPro()
-			? (settings.instantModeMaxResolution ?? PRO_INSTANT_MODE_MAX_RESOLUTION)
-			: FREE_INSTANT_MODE_MAX_RESOLUTION,
 	);
 
 	createEffect(() => {
@@ -513,18 +501,6 @@ function Inner(props: { initialStore: GeneralSettingsStore | null }) {
 					</Section>
 				)}
 
-				<CapProSection
-					hasCapPro={hasCapPro()}
-					instantResolution={instantModeMaxResolution()}
-					onInstantResolutionChange={(value) =>
-						handleChange("instantModeMaxResolution", value)
-					}
-					autoOpenShareableLinks={!settings.disableAutoOpenLinks}
-					onAutoOpenShareableLinksChange={(v) =>
-						handleChange("disableAutoOpenLinks", !v)
-					}
-				/>
-
 				<QualitySection
 					studioQuality={settings.studioRecordingQuality ?? "balanced"}
 					onStudioQualityChange={(value) =>
@@ -818,117 +794,6 @@ function StudioQualitySubsection(props: {
 				</p>
 			</div>
 		</div>
-	);
-}
-
-function InstantQualitySetting(props: {
-	hasCapPro: boolean;
-	value: number;
-	onChange: (value: number) => void;
-}) {
-	const effectiveValue = createMemo(() =>
-		props.hasCapPro ? props.value : FREE_INSTANT_MODE_MAX_RESOLUTION,
-	);
-	const currentTier = createMemo(
-		() =>
-			INSTANT_RESOLUTION_TIERS.find((t) => t.value === effectiveValue()) ??
-			INSTANT_RESOLUTION_TIERS[0],
-	);
-	const handleResolutionClick = async (value: number) => {
-		if (props.hasCapPro || value === FREE_INSTANT_MODE_MAX_RESOLUTION) {
-			props.onChange(value);
-			return;
-		}
-
-		toast.custom(
-			(t) => (
-				<div class="flex gap-3 items-center px-4 py-3 rounded-xl border shadow-lg bg-gray-1 border-gray-4 text-gray-12">
-					<p class="text-sm">
-						Upgrade to Cap Pro to record Instant Mode videos above 720p.
-					</p>
-					<button
-						type="button"
-						class="px-2.5 py-1 text-xs font-medium rounded-lg transition-colors bg-blue-9 text-white hover:bg-blue-10"
-						onClick={() => {
-							toast.dismiss(t.id);
-							void commands.showWindow("Upgrade");
-						}}
-					>
-						Upgrade
-					</button>
-				</div>
-			),
-			{ duration: 6000 },
-		);
-	};
-
-	return (
-		<SettingItem
-			id="settings-section-instant-quality"
-			label="Instant Mode quality"
-			description={
-				props.hasCapPro
-					? "Choose the maximum upload resolution for Instant recordings."
-					: "Instant recordings are locked to 720p. Cap Pro unlocks higher resolutions."
-			}
-		>
-			<div class="flex flex-col items-end gap-1.5">
-				<div class="inline-flex p-0.5 rounded-lg border border-gray-3 bg-gray-3">
-					<For each={INSTANT_RESOLUTION_TIERS}>
-						{(tier) => {
-							const isSelected = () => effectiveValue() === tier.value;
-							return (
-								<button
-									type="button"
-									onClick={() => void handleResolutionClick(tier.value)}
-									class={cx(
-										"px-3 py-1 text-xs font-medium rounded-md transition-[background-color,color,box-shadow]",
-										isSelected()
-											? "bg-gray-1 text-gray-12 shadow-sm"
-											: "text-gray-10 hover:text-gray-12",
-									)}
-								>
-									{tier.label}
-								</button>
-							);
-						}}
-					</For>
-				</div>
-				<p class="text-[11px] leading-snug text-right text-gray-10">
-					{currentTier().summary}
-				</p>
-			</div>
-		</SettingItem>
-	);
-}
-
-function CapProSection(props: {
-	hasCapPro: boolean;
-	instantResolution: number;
-	onInstantResolutionChange: (value: number) => void;
-	autoOpenShareableLinks: boolean;
-	onAutoOpenShareableLinksChange: (value: boolean) => void;
-}) {
-	return (
-		<Section
-			title="Cap Pro"
-			description="Settings available with a Cap Pro license."
-			pro
-		>
-			<SectionRows>
-				<InstantQualitySetting
-					hasCapPro={props.hasCapPro}
-					value={props.instantResolution}
-					onChange={props.onInstantResolutionChange}
-				/>
-				<ToggleSettingItem
-					label="Auto-open shareable links"
-					description="Open the share link in your browser as soon as the upload finishes."
-					value={props.autoOpenShareableLinks}
-					onChange={props.onAutoOpenShareableLinksChange}
-				/>
-			</SectionRows>
-		</Section>
 	);
 }
 

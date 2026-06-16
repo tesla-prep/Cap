@@ -52,7 +52,6 @@ interface CollectionShareDialogProps {
 	kind: "folder" | "space";
 	collectionId: string;
 	isPublic: boolean;
-	isPro: boolean;
 	isPending: boolean;
 	settings: Required<PublicPageSettings>;
 	onTogglePublic: (next: boolean) => void;
@@ -68,7 +67,6 @@ export const CollectionShareDialog = ({
 	kind,
 	collectionId,
 	isPublic,
-	isPro,
 	isPending,
 	settings,
 	onTogglePublic,
@@ -118,11 +116,6 @@ export const CollectionShareDialog = ({
 									<p className="text-sm font-medium text-gray-12">
 										Anyone with the link
 									</p>
-									{!isPro && (
-										<span className="rounded-full bg-blue-11 px-1.5 py-0.5 text-[10px] font-medium leading-none text-white">
-											Pro
-										</span>
-									)}
 								</div>
 								<p className="text-xs text-gray-10">
 									{isPublic

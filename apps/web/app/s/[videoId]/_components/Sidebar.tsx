@@ -172,7 +172,6 @@ export const Sidebar = forwardRef<{ scrollToBottom: () => void }, SidebarProps>(
 					return (
 						<Summary
 							videoId={data.id}
-							ownerIsPro={data.owner.isPro}
 							onSeek={onSeek}
 							isSummaryDisabled={videoSettings?.disableSummary}
 							initialAiData={aiData || undefined}

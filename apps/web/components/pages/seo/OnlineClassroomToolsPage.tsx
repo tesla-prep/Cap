@@ -107,7 +107,7 @@ export const onlineClassroomToolsContent: SeoPageContent = {
 		{
 			question: "How many recordings can I store?",
 			answer:
-				"Cap's free plan includes generous storage for individual educators. For departmental or institution-wide implementation, our paid plans offer expanded storage options, and you can connect your own S3 storage for unlimited self-managed content retention and complete data ownership.",
+				"Cap's open-source edition includes generous storage for individual educators. For departmental or institution-wide implementation, hosted options offer expanded storage, and you can connect your own S3 storage for unlimited self-managed content retention and complete data ownership.",
 		},
 		{
 			question: "Is Cap suitable for K-12 vs. university-level teaching?",

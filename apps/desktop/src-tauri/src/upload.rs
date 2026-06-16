@@ -348,23 +348,8 @@ pub async fn create_or_get_video_with_mode(
         .await?;
 
     if response.status() != StatusCode::OK {
-        #[derive(Deserialize, Clone, Debug)]
-        pub struct CreateErrorResponse {
-            error: String,
-        }
-
         let status = response.status();
         let body = response.text().await;
-
-        if let Some(error) = body
-            .as_ref()
-            .ok()
-            .and_then(|body| serde_json::from_str::<CreateErrorResponse>(body).ok())
-            && status == StatusCode::FORBIDDEN
-            && error.error == "upgrade_required"
-        {
-            return Err(AuthedApiError::UpgradeRequired);
-        }
 
         return Err(format!("create_or_get_video/error/{status}: {body:?}").into());
     }

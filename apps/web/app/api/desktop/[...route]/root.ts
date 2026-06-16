@@ -702,7 +702,7 @@ app.post(
 		const user = c.get("user");
 
 		if (userIsPro(user)) {
-			console.log("[POST] Error: User already on Pro plan");
+			console.log("[POST] Error: User already has an active subscription");
 			return c.json({ error: true, subscription: true }, { status: 400 });
 		}
 

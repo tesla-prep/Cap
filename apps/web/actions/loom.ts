@@ -16,7 +16,7 @@ import {
 	videoUploads,
 } from "@cap/database/schema";
 import { buildEnv, NODE_ENV, serverEnv } from "@cap/env";
-import { dub, userIsPro } from "@cap/utils";
+import { dub } from "@cap/utils";
 import { Storage } from "@cap/web-backend";
 import {
 	type Organisation,
@@ -432,13 +432,6 @@ export async function importFromLoom({
 	const user = await getCurrentUser();
 	if (!user) return { success: false, error: "Unauthorized" };
 
-	if (!userIsPro(user)) {
-		return {
-			success: false,
-			error: "Importing from Loom requires a Cap Pro subscription.",
-		};
-	}
-
 	await requireOrganizationAccess(user.id, orgId);
 
 	const isRateLimited = await createLoomImportRateLimitCheck(user.id);
@@ -623,16 +616,6 @@ export async function importFromLoomCsv({
 			failedCount: 0,
 			results: [],
 			error: "Unauthorized",
-		};
-	}
-
-	if (!userIsPro(user)) {
-		return {
-			success: false,
-			importedCount: 0,
-			failedCount: 0,
-			results: [],
-			error: "Importing from Loom requires a Cap Pro subscription.",
 		};
 	}
 

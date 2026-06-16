@@ -65,7 +65,7 @@ export const screenRecordingContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and share your screen in seconds with a shareable link. Perfect for async updates, bug reports, and quick demos. Free plan includes up to 5-minute recordings with built-in thread commenting.",
+					"Record and share your screen in seconds with a shareable link. Perfect for async updates, bug reports, and quick demos. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -90,7 +90,7 @@ export const screenRecordingContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom",
 			description:
-				"Cap is significantly more affordable than Loom, starting at $8.16/month compared to Loom's $18/month. Cap is also open-source, supports custom S3 storage, and offers Studio Mode on the free plan. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
+				"Cap is significantly more affordable than Loom, starting at $8.16/month compared to Loom's $18/month. Cap is also open-source, supports custom S3 storage, and offers Studio Mode on the open-source edition. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
 		},
 		{
 			title: "Cap vs OBS Studio",
@@ -156,7 +156,7 @@ export const screenRecordingContent: SeoPageContent = {
 		{
 			question: "Is Cap's screen recording free?",
 			answer:
-				"Yes. Cap's Studio Mode is completely free for personal use with unlimited recording time and no watermarks. Instant Mode on the free plan supports recordings up to 5 minutes with shareable links and thread commenting. <a href='/free-screen-recorder'>Download Cap's free screen recorder</a> to get started today.",
+				"Yes. Cap's Studio Mode is completely free for personal use with unlimited recording time and no watermarks. Instant Mode supports quick shareable recordings with thread commenting. <a href='/free-screen-recorder'>Download Cap's free screen recorder</a> to get started today.",
 		},
 		{
 			question: "Does screen recording capture audio?",
@@ -186,7 +186,7 @@ export const screenRecordingContent: SeoPageContent = {
 		{
 			question: "Does Cap screen recording have a time limit?",
 			answer:
-				"Studio Mode in Cap has no time limit on recordings — record as long as you need. Instant Mode on the free plan supports recordings up to 5 minutes. Cap Pro removes this limit for Instant Mode recordings as well.",
+				"Studio Mode in Cap has no time limit on recordings — record as long as you need. Instant Mode supports quick browser-based recording and can be configured for longer hosted workflows.",
 		},
 	],
 

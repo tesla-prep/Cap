@@ -202,7 +202,6 @@ export const SharedCaps = ({
 			collectionId={spaceData.id}
 			isPublic={Boolean(spaceData.public)}
 			canManage={canManageCurrentSpace}
-			isPro={Boolean(activeOrganization?.ownerIsPro)}
 			settings={
 				canManageCurrentSpace ? (spaceData.settings?.publicPage ?? null) : null
 			}

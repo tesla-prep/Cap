@@ -11,11 +11,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fit, Layout, useRive } from "@rive-app/react-canvas";
-import { useDashboardContext, useTheme } from "../../Contexts";
+import { useTheme } from "../../Contexts";
 
 const CapAIDialog = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 	const { theme } = useTheme();
-	const { user, setUpgradeModalOpen } = useDashboardContext();
 
 	const { RiveComponent: CapAIArt } = useRive({
 		src: "/rive/bento.riv",
@@ -35,9 +34,6 @@ const CapAIDialog = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 			<DialogHeader icon={<FontAwesomeIcon icon={faInfoCircle} />}>
 				<DialogTitle className="flex gap-2 items-center text-lg font-medium text-gray-12">
 					Cap AI
-					<span className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white">
-						Pro
-					</span>
 				</DialogTitle>
 			</DialogHeader>
 			<div className="p-8">
@@ -72,38 +68,14 @@ const CapAIDialog = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 				</div>
 			</div>
 			<DialogFooter>
-				{!user.isPro ? (
-					<div className="flex gap-2 ml-auto">
-						<Button
-							autoFocus={false}
-							className="min-w-[100px]"
-							variant="gray"
-							onClick={() => setOpen(false)}
-						>
-							Close
-						</Button>
-						<Button
-							autoFocus={false}
-							className="min-w-[100px]"
-							variant="blue"
-							onClick={() => {
-								setOpen(false);
-								setUpgradeModalOpen(true);
-							}}
-						>
-							Upgrade to Pro
-						</Button>
-					</div>
-				) : (
-					<Button
-						autoFocus={false}
-						className="min-w-[100px] max-w-fit ml-auto"
-						variant="primary"
-						onClick={() => setOpen(false)}
-					>
-						Close
-					</Button>
-				)}
+				<Button
+					autoFocus={false}
+					className="min-w-[100px] max-w-fit ml-auto"
+					variant="primary"
+					onClick={() => setOpen(false)}
+				>
+					Close
+				</Button>
 			</DialogFooter>
 		</DialogContent>
 	);

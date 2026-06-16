@@ -12,14 +12,12 @@ import {
 	uploadShareableLinkIcon,
 } from "@/actions/organization/shareable-link-icon";
 import { FileInput } from "@/components/FileInput";
-import { UpgradeModal } from "@/components/UpgradeModal";
 import { useDashboardContext } from "../../../Contexts";
 
 export const ShareableLinkIcon = () => {
 	const router = useRouter();
 	const iconInputId = useId();
-	const { activeOrganization, user } = useDashboardContext();
-	const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+	const { activeOrganization } = useDashboardContext();
 	const organization = activeOrganization?.organization;
 	const organizationId = organization?.id;
 	const hasOrganizationIcon = Boolean(organization?.iconUrl);
@@ -116,9 +114,6 @@ export const ShareableLinkIcon = () => {
 				<div className="space-y-1">
 					<div className="flex gap-1.5 items-center">
 						<Label htmlFor={iconInputId}>Shareable link icon</Label>
-						<p className="py-1 px-1.5 text-[10px] leading-none font-medium rounded-full text-white bg-blue-11">
-							Pro
-						</p>
 					</div>
 					<CardDescription className="w-full">
 						Use a custom logo or icon on your shareable link pages.
@@ -132,14 +127,10 @@ export const ShareableLinkIcon = () => {
 						</p>
 					</div>
 					<Switch
-						disabled={!user.isPro || !hasOrganizationIcon || isMutating}
+						disabled={!hasOrganizationIcon || isMutating}
 						checked={useOrganizationIconChecked}
 						onCheckedChange={(checked) => {
 							if (!organizationId) return;
-							if (!user.isPro) {
-								setShowUpgradeModal(true);
-								return;
-							}
 
 							setUseOrganizationIcon(checked);
 							updateIconPreference.mutate({
@@ -156,13 +147,9 @@ export const ShareableLinkIcon = () => {
 					name="shareable-link-icon"
 					onChange={(file) => {
 						if (!file || !organizationId) return;
-						if (!user.isPro) {
-							setShowUpgradeModal(true);
-							return;
-						}
 						uploadIcon.mutate({ organizationId, file });
 					}}
-					disabled={!user.isPro || useOrganizationIconChecked || isMutating}
+					disabled={useOrganizationIconChecked || isMutating}
 					isLoading={uploadIcon.isPending}
 					initialPreviewUrl={
 						useOrganizationIconChecked
@@ -171,19 +158,11 @@ export const ShareableLinkIcon = () => {
 					}
 					onRemove={() => {
 						if (!organizationId) return;
-						if (!user.isPro) {
-							setShowUpgradeModal(true);
-							return;
-						}
 						removeIcon.mutate(organizationId);
 					}}
 					maxFileSizeBytes={1024 * 1024}
 				/>
 			</div>
-			<UpgradeModal
-				open={showUpgradeModal}
-				onOpenChange={setShowUpgradeModal}
-			/>
 		</>
 	);
 };

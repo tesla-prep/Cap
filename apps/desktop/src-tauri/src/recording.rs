@@ -1326,14 +1326,10 @@ pub async fn start_recording(
             let Some(auth) = AuthStore::get(&app).ok().flatten() else {
                 return Err("Please sign in to use instant recording".to_string());
             };
-            let instant_mode_max_resolution = if auth.is_upgraded() {
-                general_settings
-                    .map_or(cap_recording::PRO_INSTANT_MODE_MAX_RESOLUTION, |settings| {
-                        settings.instant_mode_max_resolution
-                    })
-            } else {
-                cap_recording::FREE_INSTANT_MODE_MAX_RESOLUTION
-            };
+            let instant_mode_max_resolution = general_settings
+                .map_or(cap_recording::PRO_INSTANT_MODE_MAX_RESOLUTION, |settings| {
+                    settings.instant_mode_max_resolution
+                });
             let upload_mode = if matches!(inputs.capture_target, ScreenCaptureTarget::CameraOnly) {
                 "desktopMP4"
             } else {

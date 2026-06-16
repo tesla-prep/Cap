@@ -5,10 +5,8 @@ import { getCurrentUser } from "@cap/database/auth/session";
 import { hashPassword } from "@cap/database/crypto";
 import { nanoId } from "@cap/database/helpers";
 import { spaceMembers, spaces } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import {
 	type ImageUpload,
-	Organisation,
 	Space,
 	SpaceMemberId,
 	type SpaceMemberRole,
@@ -16,11 +14,7 @@ import {
 } from "@cap/web-domain";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
-import {
-	getSpaceSettingsFromFormData,
-	hasProSpaceSettingsEnabled,
-} from "./space-settings";
+import { getSpaceSettingsFromFormData } from "./space-settings";
 import { uploadSpaceIcon } from "./upload-space-icon";
 
 interface CreateSpaceResponse {
@@ -49,7 +43,6 @@ export async function createSpace(
 		const password = formData.get("password") as string | null;
 		const publicEnabled = formData.get("public") === "true";
 		const settings = getSpaceSettingsFromFormData(formData);
-		const canUseProFeatures = userIsPro(user);
 
 		if (!name) {
 			return {
@@ -62,32 +55,6 @@ export async function createSpace(
 			return {
 				success: false,
 				error: "Space password is required",
-			};
-		}
-
-		if (!canUseProFeatures && passwordEnabled) {
-			return {
-				success: false,
-				error: "Upgrade required to protect a space with a password",
-			};
-		}
-
-		if (!canUseProFeatures && hasProSpaceSettingsEnabled(settings)) {
-			return {
-				success: false,
-				error: "Upgrade required to change these viewer rules",
-			};
-		}
-
-		if (
-			publicEnabled &&
-			!(await isOrganizationOwnerPro(
-				Organisation.OrganisationId.make(user.activeOrganizationId),
-			))
-		) {
-			return {
-				success: false,
-				error: "Upgrade to Cap Pro to create a public collection link",
 			};
 		}
 

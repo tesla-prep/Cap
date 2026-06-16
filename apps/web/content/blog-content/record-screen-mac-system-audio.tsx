@@ -64,7 +64,7 @@ export const recordScreenMacContent = {
               <li>Click "Start Recording"</li>
             </ol>
             <p>That's it! Cap now captures both your screen and all system audio without any complex setup.</p>
-            <p><strong>Pro Tip:</strong> Cap works without kernel extensions and is fully compatible with macOS Sonoma and all M-series chips.</p>
+            <p><strong>Expert Tip:</strong> Cap works without kernel extensions and is fully compatible with macOS Sonoma and all M-series chips.</p>
           `,
 				},
 				{
@@ -129,7 +129,7 @@ export const recordScreenMacContent = {
 	},
 
 	proTips: {
-		title: "Pro Tips for Client Demos and Content Creators",
+		title: "Advanced Tips for Client Demos and Content Creators",
 		tips: [
 			{
 				title: "60 FPS Recording",
@@ -194,7 +194,7 @@ export const recordScreenMacContent = {
 		buttonText: "Download Cap",
 		buttonLink: "/download",
 		subtitle:
-			"Download Cap for macOS – free forever • Open-source • 14-day Pro trial",
+			"Download Cap for macOS – free forever • Open-source",
 	},
 
 	relatedLinks: [

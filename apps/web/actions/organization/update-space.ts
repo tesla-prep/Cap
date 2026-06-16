@@ -5,7 +5,6 @@ import { getCurrentUser } from "@cap/database/auth/session";
 import { hashPassword } from "@cap/database/crypto";
 import { nanoId } from "@cap/database/helpers";
 import { spaceMembers, spaces } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import { S3Buckets } from "@cap/web-backend";
 import {
 	Space,
@@ -16,14 +15,10 @@ import {
 import { eq, type SQL, sql } from "drizzle-orm";
 import { Effect, Option } from "effect";
 import { revalidatePath } from "next/cache";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
 import { normalizeSpaceRole } from "@/lib/permissions/roles";
 import { runPromise } from "@/lib/server";
 import { getSpaceAccess } from "./space-authorization";
-import {
-	getSpaceSettingsFromFormData,
-	preserveProSpaceSettings,
-} from "./space-settings";
+import { getSpaceSettingsFromFormData } from "./space-settings";
 import { uploadSpaceIcon } from "./upload-space-icon";
 
 export async function updateSpace(formData: FormData) {
@@ -48,9 +43,6 @@ export async function updateSpace(formData: FormData) {
 	const [space] = await db()
 		.select({
 			createdById: spaces.createdById,
-			organizationId: spaces.organizationId,
-			settings: spaces.settings,
-			public: spaces.public,
 		})
 		.from(spaces)
 		.where(eq(spaces.id, id))
@@ -67,24 +59,8 @@ export async function updateSpace(formData: FormData) {
 		return { success: false, error: "Unauthorized" };
 	}
 
-	// Publishing is gated on the org owner's plan, but a downgraded org can
-	// always un-publish — so only the false→true transition requires Pro.
-	if (
-		publicEnabled &&
-		!space.public &&
-		!(await isOrganizationOwnerPro(space.organizationId))
-	) {
-		return {
-			success: false,
-			error: "Upgrade to Cap Pro to create a public collection link",
-		};
-	}
-
 	const submittedSettings = getSpaceSettingsFromFormData(formData);
-	const canUseProFeatures = userIsPro(user);
-	const viewerSettings = canUseProFeatures
-		? submittedSettings
-		: preserveProSpaceSettings(submittedSettings, space.settings);
+	const viewerSettings = submittedSettings;
 	// Atomic per-key merge: the form submits every viewer-settings key
 	// explicitly, while settings.publicPage (managed by the visibility/logo
 	// actions, possibly concurrently) is left untouched instead of being
@@ -103,12 +79,6 @@ export async function updateSpace(formData: FormData) {
 	if (publicField !== null) spaceUpdate.public = publicEnabled;
 
 	if (passwordAction === "set") {
-		if (!canUseProFeatures) {
-			return {
-				success: false,
-				error: "Upgrade required to protect a space with a password",
-			};
-		}
 		if (!password?.trim()) {
 			return { success: false, error: "Space password is required" };
 		}

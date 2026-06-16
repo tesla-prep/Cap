@@ -65,7 +65,7 @@ export const openSourceScreenRecorderContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and share instantly with a link ready the moment you stop. Perfect for bug reports, async updates, and quick team communication. Free plan includes recordings up to 5 minutes with built-in thread commenting.",
+					"Record and share instantly with a link ready the moment you stop. Perfect for bug reports, async updates, and quick team communication. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -109,7 +109,7 @@ export const openSourceScreenRecorderContent: SeoPageContent = {
 			],
 			[
 				"Free to use",
-				{ text: "Yes — free plan + Studio Mode", status: "positive" },
+				{ text: "Yes — open-source edition + Studio Mode", status: "positive" },
 				{ text: "Limited", status: "warning" },
 				{ text: "Limited", status: "warning" },
 				{ text: "$299.99 one-time", status: "negative" },
@@ -163,7 +163,7 @@ export const openSourceScreenRecorderContent: SeoPageContent = {
 		{
 			title: "Cap vs Vidyard",
 			description:
-				"Vidyard is a closed-source enterprise video platform with pricing to match. Cap gives teams the same async video capabilities with full transparency, no vendor lock-in, and a free tier that covers most use cases.",
+				"Vidyard is a closed-source enterprise video platform with pricing to match. Cap gives teams the same async video capabilities with full transparency, no vendor lock-in, and a open-source edition that covers most use cases.",
 		},
 		{
 			title: "Cap vs Camtasia",
@@ -229,7 +229,7 @@ export const openSourceScreenRecorderContent: SeoPageContent = {
 		{
 			question: "Is Cap's open source version free?",
 			answer:
-				"Yes. Cap's Studio Mode is completely free for personal use with no time limits and no watermarks. Instant Mode on the free plan supports recordings up to 5 minutes. Cap Pro ($9.99/month) removes Instant Mode time limits and adds team features. The core software will always be open source and free to use.",
+				"Yes. Cap's Studio Mode is completely free for personal use with no time limits and no watermarks. Instant Mode supports quick browser-based recordings, while hosted team workflows add cloud features. The core software will always be open source and free to use.",
 		},
 		{
 			question:

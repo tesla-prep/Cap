@@ -65,7 +65,7 @@ export const videoRecordingSoftwareContent: SeoPageContent = {
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and get a shareable link the moment you stop. Perfect for quick demos, bug reports, and async team updates. Free plan includes video recordings up to 5 minutes with built-in thread commenting.",
+					"Record and get a shareable link the moment you stop. Perfect for quick demos, bug reports, and async team updates. Built-in thread commenting keeps feedback attached to the right moment.",
 			},
 			{
 				icon: (
@@ -96,7 +96,7 @@ export const videoRecordingSoftwareContent: SeoPageContent = {
 			[
 				"No watermark",
 				{ text: "Yes", status: "positive" },
-				{ text: "Free plan adds watermark", status: "negative" },
+				{ text: "Watermark-free exports", status: "negative" },
 				{ text: "Yes (paid only)", status: "warning" },
 				{ text: "Yes", status: "positive" },
 			],
@@ -153,7 +153,7 @@ export const videoRecordingSoftwareContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom",
 			description:
-				"Cap starts at $9.99/month versus Loom's $18/month, and Cap's Studio Mode is completely free with no watermarks. Cap records at up to 4K, is open-source, and supports custom S3 storage — quality and flexibility that Loom's free and paid plans don't match. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
+				"Cap starts at $9.99/month versus Loom's $18/month, and Cap's Studio Mode is completely free with no watermarks. Cap records at up to 4K, is open-source, and supports custom S3 storage — quality and flexibility that Loom doesn't match. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
 		},
 		{
 			title: "Cap vs Camtasia",
@@ -219,12 +219,12 @@ export const videoRecordingSoftwareContent: SeoPageContent = {
 		{
 			question: "What is the best free video recording software?",
 			answer:
-				"Cap is the best free video recording software for most users. Studio Mode is 100% free for personal use with no watermarks, no time limits, and up to 4K recording quality. Instant Mode supports recordings up to 5 minutes on the free plan with instant shareable links. <a href='/free-screen-recorder'>Download Cap's free recorder</a> to get started.",
+				"Cap is the best free video recording software for most users. Studio Mode is 100% free for personal use with no watermarks, no time limits, and up to 4K recording quality. Instant Mode supports quick shareable recordings with instant links. <a href='/free-screen-recorder'>Download Cap's free recorder</a> to get started.",
 		},
 		{
 			question: "Is Cap video recording software free?",
 			answer:
-				"Yes. Cap's Studio Mode is completely free for personal use with no time limits, no watermarks, and no hidden fees. Instant Mode is free for recordings up to 5 minutes. Cap Pro at $9.99/month removes Instant Mode limits and adds team features — but the core video recording software is free to use forever.",
+				"Yes. Cap's Studio Mode is completely free for personal use with no time limits, no watermarks, and no hidden fees. Instant Mode supports quick browser-based recording, and hosted team workflows add cloud collaboration features — but the core video recording software is free to use forever.",
 		},
 		{
 			question: "Does Cap video recording software work on Mac and Windows?",
@@ -239,7 +239,7 @@ export const videoRecordingSoftwareContent: SeoPageContent = {
 		{
 			question: "What video recording software has no watermark?",
 			answer:
-				"Cap has no watermark on any recording, including the free plan. Every video recording produced by Cap is completely clean with no branding overlays or watermarks. This makes Cap the best free video recording software without watermarks on Mac and Windows.",
+				"Cap has no watermark on any recording, including the open-source edition. Every video recording produced by Cap is completely clean with no branding overlays or watermarks. This makes Cap the best free video recording software without watermarks on Mac and Windows.",
 		},
 		{
 			question: "Can I self-host my video recordings with Cap?",

@@ -1,12 +1,10 @@
 import { db } from "@cap/database";
 import { getCurrentUser } from "@cap/database/auth/session";
 import { videos, videoUploads } from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import { Video } from "@cap/web-domain";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { reconcileStaleEditUpload } from "@/lib/video-edit-processing";
-import { EditUpgradeGate } from "./EditUpgradeGate";
 import { EditVideoClient } from "./EditVideoClient";
 
 function isMp4BackedVideo(source: typeof videos.$inferSelect.source) {
@@ -49,10 +47,6 @@ export default async function EditVideoPage(props: {
 		video.duration <= 0
 	) {
 		notFound();
-	}
-
-	if (!userIsPro(user)) {
-		return <EditUpgradeGate />;
 	}
 
 	if (

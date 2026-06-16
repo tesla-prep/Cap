@@ -1,7 +1,5 @@
 import * as Db from "@cap/database/schema";
-import { userIsPro } from "@cap/utils";
 import {
-	CurrentUser,
 	type DatabaseError,
 	Folder,
 	Organisation,
@@ -22,32 +20,6 @@ export class Folders extends Effect.Service<Folders>()("Folders", {
 		const db = yield* Database;
 		const policy = yield* FoldersPolicy;
 		const repo = yield* FoldersRepo;
-
-		/**
-		 * Making a collection public is a Pro feature, gated on the organization
-		 * OWNER's plan (any manager can publish while the owner is Pro). Disabling
-		 * public never requires Pro, so a downgraded org can always un-publish.
-		 */
-		const requireOwnerPro = (organizationId: Organisation.OrganisationId) =>
-			Effect.gen(function* () {
-				const [owner] = yield* db.use((db) =>
-					db
-						.select({
-							stripeSubscriptionStatus: Db.users.stripeSubscriptionStatus,
-							thirdPartyStripeSubscriptionId:
-								Db.users.thirdPartyStripeSubscriptionId,
-						})
-						.from(Db.organizations)
-						.innerJoin(Db.users, Dz.eq(Db.organizations.ownerId, Db.users.id))
-						.where(Dz.eq(Db.organizations.id, organizationId))
-						.limit(1),
-				);
-
-				if (!userIsPro(owner ?? null))
-					return yield* new Policy.PolicyDeniedError({
-						reason: "Upgrade to Cap Pro to create a public collection link",
-					});
-			});
 
 		const deleteFolder = (folder: {
 			id: Folder.FolderId;
@@ -106,13 +78,6 @@ export class Folders extends Effect.Service<Folders>()("Folders", {
 				spaceId: Option.Option<Space.SpaceIdOrOrganisationId>;
 				parentId: Option.Option<Folder.FolderId>;
 			}) {
-				const user = yield* CurrentUser;
-
-				if (data.public === true)
-					yield* requireOwnerPro(
-						Organisation.OrganisationId.make(user.activeOrganizationId),
-					);
-
 				if (Option.isSome(data.spaceId)) {
 					yield* policy.canCreateIn(data.spaceId.value);
 				}
@@ -188,13 +153,6 @@ export class Folders extends Effect.Service<Folders>()("Folders", {
 					data.parentId === undefined
 				)
 					return;
-
-				// Publishing, or customizing the public page, is Pro-gated on the
-				// org owner. Un-publishing (public: false) is always allowed.
-				if (data.public === true || data.publicPage !== undefined)
-					yield* requireOwnerPro(
-						Organisation.OrganisationId.make(folder.organizationId),
-					);
 
 				// If parentId is provided and not null, verify it exists and belongs to the same organization
 				if (data.parentId && Option.isSome(data.parentId)) {

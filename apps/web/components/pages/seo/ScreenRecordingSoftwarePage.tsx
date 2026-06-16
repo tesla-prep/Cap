@@ -1,7 +1,6 @@
 "use client";
 
 import { Clapperboard, Zap } from "lucide-react";
-import Script from "next/script";
 import { SeoPageTemplate } from "../../seo/SeoPageTemplate";
 import type { SeoPageContent } from "../../seo/types";
 
@@ -38,7 +37,7 @@ export const screenRecordingSoftwareContent: SeoPageContent = {
 		{
 			title: "Unlimited Recording and Cloud Storage",
 			description:
-				"Record as long as you need with no time limits. Store and share your recordings with unlimited cloud storage on Cap Pro.",
+				"Record as long as you need with no time limits. Store and share your recordings with hosted cloud storage.",
 		},
 		{
 			title: "Instant Sharing with Links",
@@ -60,13 +59,13 @@ export const screenRecordingSoftwareContent: SeoPageContent = {
 	recordingModes: {
 		title: "Flexible Screen Recording Modes",
 		description:
-			"Cap adapts to your workflow with multiple recording modes, both available in the free plan",
+			"Cap adapts to your workflow with multiple recording modes, both available in the open-source edition",
 		modes: [
 			{
 				icon: <Zap fill="yellow" className="mb-4 size-8" strokeWidth={1.5} />,
 				title: "Instant Mode",
 				description:
-					"Record and share your screen instantly with a simple link. Perfect for quick demos, bug reports, and async updates. Record up to 5-minute shareable links for free with built-in thread commenting for collaboration.",
+					"Record and share your screen instantly with a simple link. Perfect for quick demos, bug reports, and async updates. Record shareable links from the browser with built-in thread commenting for collaboration.",
 			},
 			{
 				icon: (
@@ -91,7 +90,7 @@ export const screenRecordingSoftwareContent: SeoPageContent = {
 		{
 			title: "Cap vs Loom",
 			description:
-				"Cap starts at $8.16/month compared to Loom's $18/month. Cap is open-source, lets you connect your own S3 storage for full data ownership, and offers a more generous free plan with Studio Mode included. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
+				"Cap starts at $8.16/month compared to Loom's $18/month. Cap is open-source, lets you connect your own S3 storage for full data ownership, and offers a more generous open-source edition with Studio Mode included. <a href='/loom-alternative'>See the full Cap vs Loom comparison</a>.",
 		},
 		{
 			title: "Cap vs OBS Studio",
@@ -153,12 +152,12 @@ export const screenRecordingSoftwareContent: SeoPageContent = {
 		{
 			question: "Does Cap offer unlimited recording time?",
 			answer:
-				"Absolutely. Cap's desktop app allows unlimited recording time with no restrictions, ideal for extended presentations, training sessions, or full-length tutorials. Instant Mode supports recordings up to 5 minutes on the free plan.",
+				"Absolutely. Cap's desktop app allows unlimited recording time with no restrictions, ideal for extended presentations, training sessions, or full-length tutorials. Instant Mode supports quick shareable recordings.",
 		},
 		{
 			question: "Can I share recordings with others?",
 			answer:
-				"Yes, Cap generates instant shareable links the moment you stop recording. Share with colleagues, clients, or students in seconds. Cap Pro includes built-in thread commenting so recipients can leave feedback directly on your videos.",
+				"Yes, Cap generates instant shareable links the moment you stop recording. Share with colleagues, clients, or students in seconds. Paid access includes built-in thread commenting so recipients can leave feedback directly on your videos.",
 		},
 		{
 			question: "How does Cap compare to other screen recording software?",
@@ -168,7 +167,7 @@ export const screenRecordingSoftwareContent: SeoPageContent = {
 		{
 			question: "What is the best screen recording software in 2026?",
 			answer:
-				"Cap is the best screen recording software for users who want a balance of quality, simplicity, and value. It records in up to 4K at 60fps, shares instantly via link, is open-source, and offers a generous free plan. For teams, Cap Pro adds cloud storage, thread commenting, and custom domains at a fraction of competitors' prices.",
+				"Cap is the best screen recording software for users who want a balance of quality, simplicity, and value. It records in up to 4K at 60fps, shares instantly via link, is open-source, and offers a generous open-source edition. For teams, hosted workflows add cloud storage, thread commenting, and custom domains at a fraction of competitors' prices.",
 		},
 		{
 			question: "How does screen recording software work?",
@@ -215,11 +214,7 @@ const createFaqStructuredData = () => {
 export const ScreenRecordingSoftwarePage = () => {
 	return (
 		<>
-			<Script
-				id="faq-structured-data"
-				type="application/ld+json"
-				dangerouslySetInnerHTML={{ __html: createFaqStructuredData() }}
-			/>
+			<script type="application/ld+json">{createFaqStructuredData()}</script>
 			<SeoPageTemplate content={screenRecordingSoftwareContent} />
 		</>
 	);

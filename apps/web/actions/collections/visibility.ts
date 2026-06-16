@@ -7,21 +7,12 @@ import { PublicCollection, Space } from "@cap/web-domain";
 import { eq, type SQL, sql } from "drizzle-orm";
 import { Either, Schema } from "effect";
 import { revalidatePath } from "next/cache";
-import { isOrganizationOwnerPro } from "@/lib/org-pro";
 import { getSpaceAccess } from "../organization/space-authorization";
 
 const decodeSettingsPatch = Schema.decodeUnknownEither(
 	PublicCollection.PublicPageSettingsUpdate,
 );
 
-/**
- * Toggles a space's public collection link and/or its public-page presentation
- * settings from the dashboard space page. Enabling public (or customizing the
- * page) requires the org owner to be on Pro; un-publishing is always allowed.
- *
- * `settings` is a partial patch merged into the stored `settings.publicPage`,
- * mirroring the folder path (FolderUpdate RPC).
- */
 export async function setSpaceCollectionVisibility(input: {
 	spaceId: string;
 	public?: boolean;
@@ -67,19 +58,6 @@ export async function setSpaceCollectionVisibility(input: {
 
 	if (!space) return { success: false, error: "Space not found" };
 	if (!access?.canManage) return { success: false, error: "Unauthorized" };
-
-	const enablingPublic = input.public === true && !space.public;
-	const changingSettings = settingsPatch !== undefined;
-
-	if (
-		(enablingPublic || changingSettings) &&
-		!(await isOrganizationOwnerPro(space.organizationId))
-	) {
-		return {
-			success: false,
-			error: "Upgrade to Cap Pro to create a public collection link",
-		};
-	}
 
 	const update: { public?: boolean; settings?: SQL } = {};
 	if (input.public !== undefined) update.public = input.public;
