@@ -35,6 +35,8 @@ Keep the production `.env` on the server. The deploy workflow does not overwrite
 
 The SSH public key that matches `NEBIUS_SSH_KEY` must be present in the deploy user's `~/.ssh/authorized_keys`.
 
+If `NEBIUS_DEPLOY_PATH` already exists but was copied without a `.git` directory, the first deploy clones `tesla-prep/Cap` into that path, preserves the existing `.env`, and moves the previous directory to a timestamped backup next to it.
+
 ## Trigger
 
 Deployment runs automatically on every push to `main` in `tesla-prep/Cap`. It can also be started manually from the `Deploy to Nebius` workflow in GitHub Actions.

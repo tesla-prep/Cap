@@ -69,6 +69,26 @@ jobs:
             "${remote_env[*]} bash -s" <<'REMOTE'
           set -euo pipefail
 
+          deploy_parent="$(dirname "$DEPLOY_PATH")"
+          deploy_name="$(basename "$DEPLOY_PATH")"
+
+          if [ ! -d "$DEPLOY_PATH/.git" ]; then
+            temp_dir="$(mktemp -d "$deploy_parent/.${deploy_name}.clone.XXXXXX")"
+            git clone https://github.com/tesla-prep/Cap.git "$temp_dir/repo"
+
+            if [ -f "$DEPLOY_PATH/.env" ]; then
+              cp -p "$DEPLOY_PATH/.env" "$temp_dir/repo/.env"
+            fi
+
+            if [ -e "$DEPLOY_PATH" ]; then
+              backup_path="$deploy_parent/.${deploy_name}.backup.$(date +%Y%m%d%H%M%S)"
+              mv "$DEPLOY_PATH" "$backup_path"
+            fi
+
+            mv "$temp_dir/repo" "$DEPLOY_PATH"
+            rmdir "$temp_dir"
+          fi
+
           cd "$DEPLOY_PATH"
 
           if git remote get-url origin >/dev/null 2>&1; then
@@ -77,7 +97,7 @@ jobs:
             git remote add origin https://github.com/tesla-prep/Cap.git
           fi
 
-          git fetch --prune origin main
+          git fetch --prune origin "+refs/heads/*:refs/remotes/origin/*"
           git checkout -B main origin/main
           git reset --hard "$DEPLOY_SHA"
 
