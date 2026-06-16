@@ -107,7 +107,7 @@ TRANSCRIPT_SYNC_POSTGRES_PASSWORD=<generated-postgres-password>
 TRANSCRIPT_SYNC_CRON_SECRET=<generated-secret>
 ```
 
-Leave `TRANSCRIPT_SYNC_ORG_ID` empty until first-user onboarding creates the self-hosted organization.
+Leave `TRANSCRIPT_SYNC_ORG_ID` and `CAP_SINGLE_ORG_ID` empty until first-user onboarding creates the self-hosted organization.
 
 The VPS override starts a separate `transcript-postgres` container and wires Cap Web to:
 
@@ -143,6 +143,7 @@ Add the selected ID to `.env`:
 
 ```bash
 TRANSCRIPT_SYNC_ORG_ID=<new-organization-id>
+CAP_SINGLE_ORG_ID=<new-organization-id>
 ```
 
 Restart Cap Web so the sync process receives the new value:

@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@cap/database/auth/session";
+import { serverEnv } from "@cap/env";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AuthContextProvider } from "@/app/Layout/AuthContext";
@@ -68,6 +69,7 @@ export default async function DashboardLayout({
 	const theme = (await cookies()).get("theme")?.value ?? "light";
 	const sidebar = (await cookies()).get("sidebarCollapsed")?.value ?? "false";
 	const referClicked = (await cookies()).get("referClicked")?.value ?? "false";
+	const organizationCreationDisabled = !!serverEnv().CAP_SINGLE_ORG_ID;
 
 	return (
 		<AuthContextProvider user={runPromise(resolveCurrentUser)}>
@@ -85,9 +87,13 @@ export default async function DashboardLayout({
 					referClicked={referClicked === "true"}
 				>
 					<div className="bg-gray-2 dashboard-grid">
-						<DesktopNav />
+						<DesktopNav
+							organizationCreationDisabled={organizationCreationDisabled}
+						/>
 						<div className="flex h-full [grid-area:main] focus:outline-none">
-							<MobileNav />
+							<MobileNav
+								organizationCreationDisabled={organizationCreationDisabled}
+							/>
 							<DashboardInner>{children}</DashboardInner>
 						</div>
 						<MobileTab />

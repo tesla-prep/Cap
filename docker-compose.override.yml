@@ -14,6 +14,7 @@ services:
       TRANSCRIPT_SYNC_POSTGRES_URL: postgres://cap_transcripts_app:${TRANSCRIPT_SYNC_POSTGRES_PASSWORD}@transcript-postgres:5432/cap_transcripts
       TRANSCRIPT_SYNC_ORG_ID: ${TRANSCRIPT_SYNC_ORG_ID:-}
       TRANSCRIPT_SYNC_CRON_SECRET: ${TRANSCRIPT_SYNC_CRON_SECRET:-}
+      CAP_SINGLE_ORG_ID: ${CAP_SINGLE_ORG_ID:-}
 
   media-server:
     healthcheck:

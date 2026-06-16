@@ -54,9 +54,13 @@ import { updateActiveOrganization } from "./server";
 
 interface Props {
 	toggleMobileNav?: () => void;
+	organizationCreationDisabled: boolean;
 }
 
-const AdminNavItems = ({ toggleMobileNav }: Props) => {
+const AdminNavItems = ({
+	toggleMobileNav,
+	organizationCreationDisabled,
+}: Props) => {
 	const pathname = usePathname();
 	const [open, setOpen] = useState(false);
 	const { user, sidebarCollapsed, userCapsCount } = useDashboardContext();
@@ -299,16 +303,18 @@ const AdminNavItems = ({ toggleMobileNav }: Props) => {
 												</CommandItem>
 											);
 										})}
-										<DialogTrigger asChild>
-											<Button
-												variant="dark"
-												size="sm"
-												className="flex gap-1 items-center my-2 w-[90%] mx-auto text-sm"
-											>
-												<Plus className="w-3.5 h-auto" />
-												New organization
-											</Button>
-										</DialogTrigger>
+										{!organizationCreationDisabled && (
+											<DialogTrigger asChild>
+												<Button
+													variant="dark"
+													size="sm"
+													className="flex gap-1 items-center my-2 w-[90%] mx-auto text-sm"
+												>
+													<Plus className="w-3.5 h-auto" />
+													New organization
+												</Button>
+											</DialogTrigger>
+										)}
 									</CommandGroup>
 								</Command>
 							</PopoverContent>

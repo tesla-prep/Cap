@@ -11,7 +11,11 @@ import { useDashboardContext } from "../../Contexts";
 import { DeveloperSidebarContent } from "../../developers/_components/DeveloperSidebarContent";
 import AdminNavItems from "./Items";
 
-export const DesktopNav = () => {
+export const DesktopNav = ({
+	organizationCreationDisabled,
+}: {
+	organizationCreationDisabled: boolean;
+}) => {
 	const { toggleSidebarCollapsed, sidebarCollapsed, isDeveloperSection } =
 		useDashboardContext();
 	const { platform } = useDetectPlatform();
@@ -104,7 +108,9 @@ export const DesktopNav = () => {
 						{isDeveloperSection ? (
 							<DeveloperSidebarContent />
 						) : (
-							<AdminNavItems />
+							<AdminNavItems
+								organizationCreationDisabled={organizationCreationDisabled}
+							/>
 						)}
 					</div>
 				</div>

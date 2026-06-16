@@ -1,8 +1,14 @@
+import { serverEnv } from "@cap/env";
 import { STRIPE_AVAILABLE, stripe } from "@cap/utils";
 import { type ImageUpload, Organisation, User } from "@cap/web-domain";
 import { and, eq } from "drizzle-orm";
 import type { MySql2Database } from "drizzle-orm/mysql2";
-import type { Adapter } from "next-auth/adapters";
+import type {
+	Adapter,
+	AdapterAccount,
+	AdapterSession,
+	AdapterUser,
+} from "next-auth/adapters";
 import type Stripe from "stripe";
 import { nanoId } from "../helpers.ts";
 import {
@@ -17,9 +23,12 @@ import {
 
 export function DrizzleAdapter(db: MySql2Database): Adapter {
 	return {
-		async createUser(userData: any) {
+		async createUser(userData: Omit<AdapterUser, "id">) {
 			const normalizedEmail = (userData.email as string)?.toLowerCase() ?? "";
 			const userId = User.UserId.make(nanoId());
+			const singleOrgId = serverEnv().CAP_SINGLE_ORG_ID
+				? Organisation.OrganisationId.make(serverEnv().CAP_SINGLE_ORG_ID)
+				: null;
 			await db.transaction(async (tx) => {
 				const [pendingInvite] = await tx
 					.select({ id: organizationInvites.id })
@@ -38,8 +47,37 @@ export function DrizzleAdapter(db: MySql2Database): Adapter {
 					emailVerified: userData.emailVerified,
 					name: userData.name,
 					image: userData.image,
-					activeOrganizationId: Organisation.OrganisationId.make(""),
+					activeOrganizationId:
+						singleOrgId ?? Organisation.OrganisationId.make(""),
 				});
+
+				if (singleOrgId) {
+					const [singleOrg] = await tx
+						.select({ id: organizations.id })
+						.from(organizations)
+						.where(eq(organizations.id, singleOrgId))
+						.limit(1);
+
+					if (!singleOrg) {
+						throw new Error("CAP_SINGLE_ORG_ID does not match an organization");
+					}
+
+					await tx.insert(organizationMembers).values({
+						id: nanoId(),
+						organizationId: singleOrgId,
+						userId,
+						role: "member",
+					});
+
+					await tx
+						.update(users)
+						.set({
+							activeOrganizationId: singleOrgId,
+							defaultOrgId: singleOrgId,
+						})
+						.where(eq(users.id, userId));
+					return;
+				}
 
 				if (pendingInvite) {
 					return;
@@ -202,23 +240,30 @@ export function DrizzleAdapter(db: MySql2Database): Adapter {
 		async deleteUser(userId) {
 			await db.delete(users).where(eq(users.id, User.UserId.make(userId)));
 		},
-		async linkAccount(account: any) {
+		async linkAccount(account: AdapterAccount) {
+			const accountWithRefreshExpires = account as AdapterAccount & {
+				refresh_token_expires_in?: number | null;
+			};
 			await db.insert(accounts).values({
 				id: User.UserId.make(nanoId()),
-				userId: account.userId,
+				userId: User.UserId.make(account.userId),
 				type: account.type,
 				provider: account.provider,
 				providerAccountId: account.providerAccountId,
-				access_token: account.access_token,
-				expires_in: account.expires_in as number,
-				id_token: account.id_token,
-				refresh_token: account.refresh_token,
-				refresh_token_expires_in: account.refresh_token_expires_in as number,
-				scope: account.scope,
-				token_type: account.token_type,
+				access_token: account.access_token ?? null,
+				expires_in: account.expires_in ?? null,
+				id_token: account.id_token ?? null,
+				refresh_token: account.refresh_token ?? null,
+				refresh_token_expires_in:
+					accountWithRefreshExpires.refresh_token_expires_in ?? null,
+				scope: account.scope ?? null,
+				token_type: account.token_type ?? null,
 			});
 		},
-		async unlinkAccount({ providerAccountId, provider }: any) {
+		async unlinkAccount({
+			providerAccountId,
+			provider,
+		}: Pick<AdapterAccount, "provider" | "providerAccountId">) {
 			await db
 				.delete(accounts)
 				.where(
@@ -272,10 +317,19 @@ export function DrizzleAdapter(db: MySql2Database): Adapter {
 				},
 			};
 		},
-		async updateSession(session: any) {
+		async updateSession(
+			session: Partial<AdapterSession> & Pick<AdapterSession, "sessionToken">,
+		) {
+			const updateValues: Partial<typeof sessions.$inferInsert> = {
+				sessionToken: session.sessionToken,
+			};
+			if (session.expires) updateValues.expires = session.expires;
+			if (session.userId)
+				updateValues.userId = User.UserId.make(session.userId);
+
 			await db
 				.update(sessions)
-				.set(session as any)
+				.set(updateValues)
 				.where(eq(sessions.sessionToken, session.sessionToken));
 			const rows = await db
 				.select()

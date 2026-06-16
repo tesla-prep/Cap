@@ -10,7 +10,11 @@ import { type MutableRefObject, useState } from "react";
 import { DashboardSearch } from "./DashboardSearch";
 import NavItems from "./Items";
 
-export const AdminMobileNav = () => {
+export const AdminMobileNav = ({
+	organizationCreationDisabled,
+}: {
+	organizationCreationDisabled: boolean;
+}) => {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const sidebarRef: MutableRefObject<HTMLDivElement> = useClickAway(() =>
 		setSidebarOpen(false),
@@ -46,7 +50,10 @@ export const AdminMobileNav = () => {
 									<X className="text-gray-12 size-7" aria-hidden="true" />
 								</button>
 							</div>
-							<NavItems toggleMobileNav={() => setSidebarOpen(false)} />
+							<NavItems
+								toggleMobileNav={() => setSidebarOpen(false)}
+								organizationCreationDisabled={organizationCreationDisabled}
+							/>
 						</motion.div>
 					</motion.div>
 				) : null}

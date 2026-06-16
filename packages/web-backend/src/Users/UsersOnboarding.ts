@@ -1,5 +1,6 @@
 import { nanoId } from "@cap/database/helpers";
 import * as Db from "@cap/database/schema";
+import { serverEnv } from "@cap/env";
 import { CurrentUser, Organisation } from "@cap/web-domain";
 import * as Dz from "drizzle-orm";
 import { Effect, Option } from "effect";
@@ -76,6 +77,9 @@ export class UsersOnboarding extends Effect.Service<UsersOnboarding>()(
 						};
 					}) {
 						const currentUser = yield* CurrentUser;
+						const singleOrgId = serverEnv().CAP_SINGLE_ORG_ID
+							? Organisation.OrganisationId.make(serverEnv().CAP_SINGLE_ORG_ID)
+							: null;
 
 						const [user] = yield* db.use((db) =>
 							db
@@ -88,6 +92,61 @@ export class UsersOnboarding extends Effect.Service<UsersOnboarding>()(
 							data.organizationName.trim() || data.organizationName;
 						let organizationId =
 							user.activeOrganizationId ?? user.defaultOrgId ?? null;
+
+						if (singleOrgId) {
+							yield* db.use((db) =>
+								db.transaction(async (tx) => {
+									const [singleOrg] = await tx
+										.select({ id: Db.organizations.id })
+										.from(Db.organizations)
+										.where(Dz.eq(Db.organizations.id, singleOrgId))
+										.limit(1);
+
+									if (!singleOrg) {
+										throw new Error(
+											"CAP_SINGLE_ORG_ID does not match an organization",
+										);
+									}
+
+									const [membership] = await tx
+										.select({ id: Db.organizationMembers.id })
+										.from(Db.organizationMembers)
+										.where(
+											Dz.and(
+												Dz.eq(
+													Db.organizationMembers.organizationId,
+													singleOrgId,
+												),
+												Dz.eq(Db.organizationMembers.userId, currentUser.id),
+											),
+										)
+										.limit(1);
+
+									if (!membership) {
+										await tx.insert(Db.organizationMembers).values({
+											id: nanoId(),
+											organizationId: singleOrgId,
+											userId: currentUser.id,
+											role: "member",
+										});
+									}
+
+									await tx
+										.update(Db.users)
+										.set({
+											activeOrganizationId: singleOrgId,
+											defaultOrgId: singleOrgId,
+											onboardingSteps: {
+												...user.onboardingSteps,
+												organizationSetup: true,
+											},
+										})
+										.where(Dz.eq(Db.users.id, currentUser.id));
+								}),
+							);
+
+							return { organizationId: singleOrgId };
+						}
 
 						yield* db.use((db) =>
 							db.transaction(async (tx) => {
@@ -254,6 +313,9 @@ export class UsersOnboarding extends Effect.Service<UsersOnboarding>()(
 				}),
 				skipToDashboard: Effect.fn("Onboarding.skipToDashboard")(function* () {
 					const currentUser = yield* CurrentUser;
+					const singleOrgId = serverEnv().CAP_SINGLE_ORG_ID
+						? Organisation.OrganisationId.make(serverEnv().CAP_SINGLE_ORG_ID)
+						: null;
 
 					const [user] = yield* db.use((db) =>
 						db
@@ -267,6 +329,61 @@ export class UsersOnboarding extends Effect.Service<UsersOnboarding>()(
 					const orgName = shouldUsePlaceholder
 						? "Your Organization"
 						: `${user.name}'s organization`;
+
+					if (singleOrgId) {
+						yield* db.use((db) =>
+							db.transaction(async (tx) => {
+								const [singleOrg] = await tx
+									.select({ id: Db.organizations.id })
+									.from(Db.organizations)
+									.where(Dz.eq(Db.organizations.id, singleOrgId))
+									.limit(1);
+
+								if (!singleOrg) {
+									throw new Error(
+										"CAP_SINGLE_ORG_ID does not match an organization",
+									);
+								}
+
+								const [membership] = await tx
+									.select({ id: Db.organizationMembers.id })
+									.from(Db.organizationMembers)
+									.where(
+										Dz.and(
+											Dz.eq(Db.organizationMembers.organizationId, singleOrgId),
+											Dz.eq(Db.organizationMembers.userId, currentUser.id),
+										),
+									)
+									.limit(1);
+
+								if (!membership) {
+									await tx.insert(Db.organizationMembers).values({
+										id: nanoId(),
+										organizationId: singleOrgId,
+										userId: currentUser.id,
+										role: "member",
+									});
+								}
+
+								await tx
+									.update(Db.users)
+									.set({
+										name: userName,
+										activeOrganizationId: singleOrgId,
+										defaultOrgId: singleOrgId,
+										onboardingSteps: {
+											welcome: true,
+											organizationSetup: true,
+											customDomain: true,
+											inviteTeam: true,
+											download: true,
+										},
+									})
+									.where(Dz.eq(Db.users.id, currentUser.id));
+							}),
+						);
+						return;
+					}
 
 					yield* db.use((db) =>
 						db.transaction(async (tx) => {

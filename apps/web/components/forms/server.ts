@@ -8,6 +8,7 @@ import {
 	organizations,
 	users,
 } from "@cap/database/schema";
+import { serverEnv } from "@cap/env";
 import { S3Buckets } from "@cap/web-backend";
 import { ImageUpload, Organisation, type User } from "@cap/web-domain";
 import { eq } from "drizzle-orm";
@@ -18,6 +19,9 @@ import { runPromise } from "@/lib/server";
 export async function createOrganization(formData: FormData) {
 	const user = await getCurrentUser();
 	if (!user) throw new Error("Unauthorized");
+	if (serverEnv().CAP_SINGLE_ORG_ID) {
+		throw new Error("Organization creation is disabled for this workspace");
+	}
 
 	// Extract the name from the FormData
 	const name = formData.get("name") as string;
