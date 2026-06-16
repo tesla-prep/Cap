@@ -79,6 +79,7 @@ Additionally, `unused_must_use = "deny"` applies to all Rust code: every `Result
 ## Commits & PRs
 - Conventional style: `feat:`, `fix:`, `chore:`, `improve:`, `refactor:`, `docs:` (e.g., `fix: hide watermark for pro users`).
 - PRs: clear description, linked issues, screenshots/GIFs for UI, env/migration notes. Keep scope tight and update docs when behavior changes.
+- Commit, push, and open pull requests only in the fork `tesla-prep/Cap`. Treat `CapSoftware/Cap` as read-only upstream for fetch/rebase comparisons only; never create branches, commits, pushes, or pull requests against `CapSoftware/Cap`. Before opening a PR, verify `gh repo view` resolves to `tesla-prep/Cap` and the PR base repository is `tesla-prep/Cap`.
 
 ## Agent‑Specific Practices
 - Do not start extra servers; use `pnpm dev:web` or `pnpm dev:desktop` as needed.
