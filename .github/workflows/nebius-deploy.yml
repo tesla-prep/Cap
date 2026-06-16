@@ -1,0 +1,93 @@
+name: Deploy to Nebius
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: nebius-production
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: github.repository == 'tesla-prep/Cap'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Validate deployment secrets
+        env:
+          NEBIUS_HOST: ${{ secrets.NEBIUS_HOST }}
+          NEBIUS_USER: ${{ secrets.NEBIUS_USER }}
+          NEBIUS_SSH_KEY: ${{ secrets.NEBIUS_SSH_KEY }}
+          NEBIUS_DEPLOY_PATH: ${{ secrets.NEBIUS_DEPLOY_PATH }}
+        run: |
+          missing=0
+          for name in NEBIUS_HOST NEBIUS_USER NEBIUS_SSH_KEY NEBIUS_DEPLOY_PATH; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required repository secret: ${name}"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Configure SSH
+        env:
+          NEBIUS_HOST: ${{ secrets.NEBIUS_HOST }}
+          NEBIUS_PORT: ${{ secrets.NEBIUS_PORT || '22' }}
+          NEBIUS_SSH_KEY: ${{ secrets.NEBIUS_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf "%s\n" "$NEBIUS_SSH_KEY" | tr -d '\r' > ~/.ssh/nebius_deploy_key
+          chmod 600 ~/.ssh/nebius_deploy_key
+          ssh-keyscan -p "$NEBIUS_PORT" "$NEBIUS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy on Nebius
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+          NEBIUS_HOST: ${{ secrets.NEBIUS_HOST }}
+          NEBIUS_USER: ${{ secrets.NEBIUS_USER }}
+          NEBIUS_PORT: ${{ secrets.NEBIUS_PORT || '22' }}
+          NEBIUS_DEPLOY_PATH: ${{ secrets.NEBIUS_DEPLOY_PATH }}
+          NEBIUS_DEPLOY_COMMAND: ${{ secrets.NEBIUS_DEPLOY_COMMAND }}
+        run: |
+          remote_env=(
+            "DEPLOY_PATH=$(printf "%q" "$NEBIUS_DEPLOY_PATH")"
+            "DEPLOY_SHA=$(printf "%q" "$DEPLOY_SHA")"
+            "DEPLOY_COMMAND=$(printf "%q" "$NEBIUS_DEPLOY_COMMAND")"
+          )
+
+          ssh \
+            -i ~/.ssh/nebius_deploy_key \
+            -p "$NEBIUS_PORT" \
+            -o IdentitiesOnly=yes \
+            "$NEBIUS_USER@$NEBIUS_HOST" \
+            "${remote_env[*]} bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          cd "$DEPLOY_PATH"
+
+          if git remote get-url origin >/dev/null 2>&1; then
+            git remote set-url origin https://github.com/tesla-prep/Cap.git
+          else
+            git remote add origin https://github.com/tesla-prep/Cap.git
+          fi
+
+          git fetch --prune origin main
+          git checkout -B main origin/main
+          git reset --hard "$DEPLOY_SHA"
+
+          if [ -n "${DEPLOY_COMMAND:-}" ]; then
+            bash -lc "$DEPLOY_COMMAND"
+          else
+            docker compose up -d --build --remove-orphans
+          fi
+
+          if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+            docker compose ps
+          fi
+          REMOTE
