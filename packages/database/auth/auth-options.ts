@@ -9,6 +9,7 @@ import { decode, type JWT, type JWTDecodeParams } from "next-auth/jwt";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import type { Provider } from "next-auth/providers/index";
+import KeycloakProvider from "next-auth/providers/keycloak";
 import WorkOSProvider from "next-auth/providers/workos";
 import { sendEmail } from "../emails/config.ts";
 import { db } from "../index.ts";
@@ -41,6 +42,24 @@ export async function decodeSessionToken(
 	if (sessionVersion !== user.authSessionVersion) return null;
 
 	return token;
+}
+
+function keycloakProviders(): Provider[] {
+	const { KEYCLOAK_ISSUER, KEYCLOAK_CLIENT_ID, KEYCLOAK_CLIENT_SECRET } =
+		serverEnv();
+	if (!KEYCLOAK_ISSUER || !KEYCLOAK_CLIENT_ID || !KEYCLOAK_CLIENT_SECRET)
+		return [];
+
+	return [
+		KeycloakProvider({
+			issuer: KEYCLOAK_ISSUER,
+			clientId: KEYCLOAK_CLIENT_ID,
+			clientSecret: KEYCLOAK_CLIENT_SECRET,
+			// The realm is the company directory, so its email is trusted to link
+			// accounts that were created earlier with an emailed code.
+			allowDangerousEmailAccountLinking: true,
+		}),
+	];
 }
 
 export const authOptions = (): NextAuthOptions => {
@@ -96,6 +115,7 @@ export const authOptions = (): NextAuthOptions => {
 						};
 					},
 				}),
+				...keycloakProviders(),
 				EmailProvider({
 					async generateVerificationToken() {
 						return crypto.randomInt(100000, 1000000).toString();
@@ -132,7 +152,10 @@ export const authOptions = (): NextAuthOptions => {
 						}
 					},
 				}),
-			];
+			].filter(
+				(provider) =>
+					provider.id !== "email" || !serverEnv().CAP_EMAIL_LOGIN_DISABLED,
+			);
 
 			return _providers;
 		},

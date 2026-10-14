@@ -37,6 +37,12 @@ export async function AppProviders({ children }: PropsWithChildren) {
 									webUrl: buildEnv.NEXT_PUBLIC_WEB_URL,
 									workosAuthAvailable: !!serverEnv().WORKOS_CLIENT_ID,
 									googleAuthAvailable: !!serverEnv().GOOGLE_CLIENT_ID,
+									keycloakAuthAvailable: !!(
+										serverEnv().KEYCLOAK_ISSUER &&
+										serverEnv().KEYCLOAK_CLIENT_ID &&
+										serverEnv().KEYCLOAK_CLIENT_SECRET
+									),
+									emailAuthAvailable: !serverEnv().CAP_EMAIL_LOGIN_DISABLED,
 								}}
 							>
 								<ReactQueryProvider>

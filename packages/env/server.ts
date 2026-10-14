@@ -72,6 +72,15 @@ function createServerEnv() {
 			WORKOS_CLIENT_ID: z.string().optional(),
 			WORKOS_API_KEY: z.string().optional(),
 
+			/// Keycloak SSO
+			// Provide all three to allow login through a Keycloak realm
+			KEYCLOAK_ISSUER: z
+				.string()
+				.optional()
+				.describe("Realm URL, e.g. https://id.example.com/realms/Staff"),
+			KEYCLOAK_CLIENT_ID: z.string().optional(),
+			KEYCLOAK_CLIENT_SECRET: z.string().optional(),
+
 			/// Settings
 			CAP_VIDEOS_DEFAULT_PUBLIC: boolString(true).describe(
 				"Should videos be public or private by default",
@@ -80,6 +89,9 @@ function createServerEnv() {
 				.string()
 				.optional()
 				.describe("Comma-separated list of permitted signup domains"),
+			CAP_EMAIL_LOGIN_DISABLED: boolString(false).describe(
+				"Turn off login and signup with an emailed code",
+			),
 			CAP_SINGLE_ORG_ID: z
 				.string()
 				.optional()
