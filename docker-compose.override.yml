@@ -15,6 +15,11 @@ services:
       TRANSCRIPT_SYNC_ORG_ID: ${TRANSCRIPT_SYNC_ORG_ID:-}
       TRANSCRIPT_SYNC_CRON_SECRET: ${TRANSCRIPT_SYNC_CRON_SECRET:-}
       CAP_SINGLE_ORG_ID: ${CAP_SINGLE_ORG_ID:-}
+      CAP_ALLOWED_SIGNUP_DOMAINS: ${CAP_ALLOWED_SIGNUP_DOMAINS:-}
+      CAP_EMAIL_LOGIN_DISABLED: ${CAP_EMAIL_LOGIN_DISABLED:-}
+      KEYCLOAK_ISSUER: ${KEYCLOAK_ISSUER:-}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-}
 
   media-server:
     healthcheck:
@@ -32,6 +37,8 @@ services:
 
   transcript-postgres:
     container_name: cap-transcript-postgres
+    ports:
+      - "127.0.0.1:55434:5432"
     image: postgres:16-alpine
     restart: unless-stopped
     environment:

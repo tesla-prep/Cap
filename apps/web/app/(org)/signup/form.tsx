@@ -19,6 +19,7 @@ import { Suspense, useEffect, useId, useState } from "react";
 import { toast } from "sonner";
 import { getOrganizationSSOData } from "@/actions/organization/get-organization-sso-data";
 import { trackEvent } from "@/app/utils/analytics";
+import { KeycloakSignInButton } from "@/components/KeycloakSignInButton";
 import { usePublicEnv } from "@/utils/public-env";
 import { getEmailCodeCooldownSeconds, requestEmailCode } from "../auth-email";
 
@@ -290,6 +291,7 @@ export function SignupForm() {
 										className="flex flex-col space-y-3"
 									>
 										<NormalSignup
+											next={next}
 											setShowOrgInput={setShowOrgInput}
 											email={email}
 											emailSent={emailSent}
@@ -385,6 +387,7 @@ const SignupWithSSO = ({
 };
 
 const NormalSignup = ({
+	next,
 	setShowOrgInput,
 	email,
 	emailSent,
@@ -393,6 +396,7 @@ const NormalSignup = ({
 	oauthError,
 	handleGoogleSignIn,
 }: {
+	next: string | null | undefined;
 	setShowOrgInput: (show: boolean) => void;
 	email: string;
 	emailSent: boolean;
@@ -407,33 +411,43 @@ const NormalSignup = ({
 	return (
 		<motion.div>
 			<motion.div layout className="flex flex-col space-y-3">
-				<MotionInput
-					id={emailInputId}
-					name="email"
-					autoFocus
-					type="email"
-					placeholder={emailSent ? "" : "tim@apple.com"}
-					autoComplete="email"
-					required
-					value={email}
-					disabled={emailSent || loading}
-					onChange={(e) => {
-						setEmail(e.target.value.toLowerCase());
-					}}
-				/>
-				<MotionButton
-					variant="dark"
-					type="submit"
-					disabled={loading || emailSent}
-					spinner={loading}
-					icon={
-						loading ? undefined : (
-							<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />
-						)
-					}
-				>
-					{loading ? "Sending code..." : "Sign up with email"}
-				</MotionButton>
+				{publicEnv.keycloakAuthAvailable && (
+					<KeycloakSignInButton
+						callbackUrl={next}
+						disabled={loading || emailSent}
+					/>
+				)}
+				{publicEnv.emailAuthAvailable && (
+					<>
+						<MotionInput
+							id={emailInputId}
+							name="email"
+							autoFocus
+							type="email"
+							placeholder={emailSent ? "" : "tim@apple.com"}
+							autoComplete="email"
+							required
+							value={email}
+							disabled={emailSent || loading}
+							onChange={(e) => {
+								setEmail(e.target.value.toLowerCase());
+							}}
+						/>
+						<MotionButton
+							variant="dark"
+							type="submit"
+							disabled={loading || emailSent}
+							spinner={loading}
+							icon={
+								loading ? undefined : (
+									<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />
+								)
+							}
+						>
+							{loading ? "Sending code..." : "Sign up with email"}
+						</MotionButton>
+					</>
+				)}
 			</motion.div>
 			{(publicEnv.googleAuthAvailable || publicEnv.workosAuthAvailable) && (
 				<>

@@ -19,6 +19,7 @@ import { Suspense, useEffect, useId, useState } from "react";
 import { toast } from "sonner";
 import { getOrganizationSSOData } from "@/actions/organization/get-organization-sso-data";
 import { trackEvent } from "@/app/utils/analytics";
+import { KeycloakSignInButton } from "@/components/KeycloakSignInButton";
 import { usePublicEnv } from "@/utils/public-env";
 import { getEmailCodeCooldownSeconds, requestEmailCode } from "../auth-email";
 
@@ -290,6 +291,7 @@ export function LoginForm() {
 										className="flex flex-col space-y-3"
 									>
 										<NormalLogin
+											next={next}
 											setShowOrgInput={setShowOrgInput}
 											email={email}
 											emailSent={emailSent}
@@ -371,6 +373,7 @@ const LoginWithSSO = ({
 };
 
 const NormalLogin = ({
+	next,
 	setShowOrgInput,
 	email,
 	emailSent,
@@ -379,6 +382,7 @@ const NormalLogin = ({
 	oauthError,
 	handleGoogleSignIn,
 }: {
+	next: string | null | undefined;
 	setShowOrgInput: (show: boolean) => void;
 	email: string;
 	emailSent: boolean;
@@ -393,56 +397,58 @@ const NormalLogin = ({
 	return (
 		<motion.div>
 			<motion.div layout className="flex flex-col space-y-3">
-				<MotionInput
-					id={emailInputId}
-					name="email"
-					autoFocus
-					type="email"
-					placeholder={emailSent ? "" : "tim@apple.com"}
-					autoComplete="email"
-					required
-					value={email}
-					disabled={emailSent || loading}
-					onChange={(e) => {
-						setEmail(e.target.value.toLowerCase());
-					}}
-				/>
-				<MotionButton
-					variant="dark"
-					type="submit"
-					disabled={loading || emailSent}
-					spinner={loading}
-					icon={
-						loading ? undefined : (
-							<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />
-						)
-					}
-				>
-					{loading ? "Sending code..." : "Login with email"}
-				</MotionButton>
-				{/* {NODE_ENV === "development" && (
-                  <div className="flex justify-center items-center px-6 py-3 mt-3 bg-red-600 rounded-xl">
-                    <p className="text-lg text-white">
-                      <span className="font-medium text-white">
-                        Development mode:
-                      </span>{" "}
-                      Auth URL will be logged to your dev console.
-                    </p>
-                  </div>
-                )} */}
+				{publicEnv.keycloakAuthAvailable && (
+					<KeycloakSignInButton
+						callbackUrl={next}
+						disabled={loading || emailSent}
+					/>
+				)}
+				{publicEnv.emailAuthAvailable && (
+					<>
+						<MotionInput
+							id={emailInputId}
+							name="email"
+							autoFocus
+							type="email"
+							placeholder={emailSent ? "" : "tim@apple.com"}
+							autoComplete="email"
+							required
+							value={email}
+							disabled={emailSent || loading}
+							onChange={(e) => {
+								setEmail(e.target.value.toLowerCase());
+							}}
+						/>
+						<MotionButton
+							variant="dark"
+							type="submit"
+							disabled={loading || emailSent}
+							spinner={loading}
+							icon={
+								loading ? undefined : (
+									<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />
+								)
+							}
+						>
+							{loading ? "Sending code..." : "Login with email"}
+						</MotionButton>
+					</>
+				)}
 			</motion.div>
-			<motion.p
-				layout="position"
-				className="mt-3 mb-2 text-xs text-center text-gray-9"
-			>
-				Don't have an account?{" "}
-				<Link
-					href="/signup"
-					className="text-xs font-semibold text-blue-9 hover:text-blue-8"
+			{publicEnv.emailAuthAvailable && (
+				<motion.p
+					layout="position"
+					className="mt-3 mb-2 text-xs text-center text-gray-9"
 				>
-					Sign up here
-				</Link>
-			</motion.p>
+					Don't have an account?{" "}
+					<Link
+						href="/signup"
+						className="text-xs font-semibold text-blue-9 hover:text-blue-8"
+					>
+						Sign up here
+					</Link>
+				</motion.p>
+			)}
 
 			{(publicEnv.googleAuthAvailable || publicEnv.workosAuthAvailable) && (
 				<>

@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { trackEvent } from "@/app/utils/analytics";
+import { KeycloakSignInButton } from "@/components/KeycloakSignInButton";
 import { usePublicEnv } from "@/utils/public-env";
 import OtpForm from "./OtpForm";
 
@@ -196,34 +197,44 @@ const StepOne = ({
 			}}
 			className="flex flex-col gap-3"
 		>
-			<div>
-				<Input
-					id={emailId}
-					name="email"
-					autoFocus
-					type="email"
-					placeholder={emailSent ? "" : "tim@apple.com"}
-					autoComplete="email"
-					required
-					value={email}
-					disabled={emailSent || loading}
-					onChange={(e) => {
-						setEmail(e.target.value.toLowerCase());
-					}}
+			{publicEnv.keycloakAuthAvailable && (
+				<KeycloakSignInButton
+					callbackUrl={`/s/${videoId}`}
+					disabled={loading}
 				/>
-			</div>
-			<Button
-				variant="dark"
-				type="submit"
-				icon={<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />}
-				disabled={loading || emailSent}
-			>
-				{emailSent
-					? NODE_ENV === "development"
-						? "Email sent to your terminal"
-						: "Email sent to your inbox"
-					: "Continue with Email"}
-			</Button>
+			)}
+			{publicEnv.emailAuthAvailable && (
+				<>
+					<div>
+						<Input
+							id={emailId}
+							name="email"
+							autoFocus
+							type="email"
+							placeholder={emailSent ? "" : "tim@apple.com"}
+							autoComplete="email"
+							required
+							value={email}
+							disabled={emailSent || loading}
+							onChange={(e) => {
+								setEmail(e.target.value.toLowerCase());
+							}}
+						/>
+					</div>
+					<Button
+						variant="dark"
+						type="submit"
+						icon={<FontAwesomeIcon className="mr-1 size-4" icon={faEnvelope} />}
+						disabled={loading || emailSent}
+					>
+						{emailSent
+							? NODE_ENV === "development"
+								? "Email sent to your terminal"
+								: "Email sent to your inbox"
+							: "Continue with Email"}
+					</Button>
+				</>
+			)}
 			{publicEnv.googleAuthAvailable && (
 				<>
 					<div className="flex gap-4 items-center">
